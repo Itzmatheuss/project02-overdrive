@@ -27,6 +27,7 @@
   display: flex;
   flex-direction: column;
   text-align: left;
+  width: 80%;
 }
 
 .container-company .form label span {

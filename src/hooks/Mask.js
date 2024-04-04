@@ -1,4 +1,5 @@
-const Mask = ({ cpf }) => {
+const validarCpf = (cpf) => {
+  // Remove todos os caracteres não numéricos do CPF
   cpf = cpf.replace(/\D/g, "");
 
   // Verifica se o CPF tem 11 dígitos
@@ -6,7 +7,7 @@ const Mask = ({ cpf }) => {
     return false;
   }
 
-  // Verifica se todos os dígitos são iguais, o que invalidaria o CPF
+  // Verifica se o CPF não é composto apenas por dígitos repetidos
   if (/^(\d)\1{10}$/.test(cpf)) {
     return false;
   }
@@ -19,7 +20,7 @@ const Mask = ({ cpf }) => {
   let resto = 11 - (soma % 11);
   let digitoVerificador1 = resto === 10 || resto === 11 ? 0 : resto;
 
-  // Verifica o primeiro dígito verificador
+  // Verifica se o primeiro dígito verificador calculado é igual ao fornecido
   if (digitoVerificador1 !== parseInt(cpf.charAt(9))) {
     return false;
   }
@@ -32,17 +33,13 @@ const Mask = ({ cpf }) => {
   resto = 11 - (soma % 11);
   let digitoVerificador2 = resto === 10 || resto === 11 ? 0 : resto;
 
-  // Verifica o segundo dígito verificador
+  // Verifica se o segundo dígito verificador calculado é igual ao fornecido
   if (digitoVerificador2 !== parseInt(cpf.charAt(10))) {
     return false;
   }
 
-  // Se passar por todas as verificações, o CPF é válido
+  // Se todas as verificações passaram, o CPF é válido
   return true;
 };
 
-export const insertMaskCpf = ({ cpf }) => {
-  return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "$1.$2.$3-$4");
-};
-
-export default Mask;
+export default validarCpf;

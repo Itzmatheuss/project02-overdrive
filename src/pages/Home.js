@@ -5,11 +5,11 @@ const Home = () => {
   return (
     <main>
       <div className="main-content">
-        <h1>Bem Vindo ao Register</h1>
+        <h1>Bem vindo ao Register</h1>
         <h2>Cadastre sua empresa ou funcionário aqui.</h2>
 
-        <div className="btn">
-          <Link to="/signupcomp">
+        <div className="botao">
+          <Link to="/signupcompcopy">
             <button>Cadastrar Empresa </button>
           </Link>
           <Link to="/signupuser">

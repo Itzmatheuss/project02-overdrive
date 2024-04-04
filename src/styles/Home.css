@@ -32,13 +32,13 @@ main {
   color: #636363;
 }
 
-.btn {
+.botao {
   display: flex;
   justify-content: center;
   gap: 20px;
 }
 
-.btn button {
+.botao button {
   width: 200px;
   height: 60px;
   border: 1px solid #000;
@@ -52,7 +52,7 @@ main {
   transition: 1s;
 }
 
-.btn button:hover {
+.botao button:hover {
   background-color: #deb75d;
   border: none;
 }

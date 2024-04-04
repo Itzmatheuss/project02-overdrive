@@ -1,26 +1,56 @@
 import "../styles/SignUpUser.css";
-import Mask from "../hooks/Mask";
 
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { userValidationSchema } from "../validation/UserValidation";
+
+import validarCpf from "../hooks/Mask";
 
 const SignUpUser = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    setFocus,
+    setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: yupResolver(userValidationSchema) });
 
   console.log({ errors });
-  const onSubmit = (data) => {
-    const isValidCPF = Mask(data.cpf);
 
-    console.log(isValidCPF);
-    console.log(data.cpf);
+  const onSubmit = (data) => {
+    console.log(data);
   };
+
+  const handleCpf = (e) => {
+    let input = e.target;
+    input.value = cpfMask(input.value);
+  };
+
+  const handlePhone = (e) => {
+    let input = e.target;
+    input.value = phoneMask(input.value);
+  };
+
+  const phoneMask = (value) => {
+    if (!value) return "";
+    value = value.replace(/\D/g, "");
+    value = value.replace(/(\d{2})(\d)/, "($1) $2");
+    value = value.replace(/(\d)(\d{4})$/, "$1-$2");
+    return value;
+  };
+  const cpfMask = (cpf) => {
+    if (!cpf) return "";
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "$1.$2.$3-$4");
+  };
+
+  const handleFormSubmit = (formData) => {
+    onSubmit(formData);
+  };
+
   return (
     <div className="container-user">
-      <form className="form">
+      <form className="form" onSubmit={handleSubmit(handleFormSubmit)}>
         <h2>Insira seus dados</h2>
         <div className="container-form">
           <label>
@@ -29,10 +59,10 @@ const SignUpUser = () => {
               className={errors?.name && "input-error"}
               type="text"
               placeholder="Nome"
-              {...register("name", { required: true })}
+              {...register("name")}
             />
-            {errors?.name?.type === "required" && (
-              <p className="error-message">O nome é obrigatório.</p>
+            {errors?.name && (
+              <p className="error-message">{errors?.name.message}</p>
             )}
           </label>
           <label>
@@ -41,34 +71,38 @@ const SignUpUser = () => {
               className={errors?.email && "input-error"}
               type="email"
               placeholder="Email"
-              {...register("email", { required: true })}
+              {...register("email")}
             />
-            {errors?.email?.type === "required" && (
-              <p className="error-message">O email é obrigatório.</p>
+            {errors?.email && (
+              <p className="error-message">{errors?.email.message}</p>
             )}
           </label>
           <label>
             <span>CPF:</span>
             <input
               className={errors?.cpf && "input-error"}
-              type="text"
-              placeholder="CPF"
-              {...register("cpf", { required: true })}
+              placeholder="999.999.999-99"
+              mask="000.000.000-00"
+              maxLength={11}
+              onKeyUp={handleCpf}
+              {...register("cpf")}
             />
-            {errors?.cpf?.type === "required" && (
-              <p className="error-message">O cpf é obrigatório.</p>
+            {errors?.cpf && (
+              <p className="error-message">{errors?.cpf.message}</p>
             )}
           </label>
           <label>
             <span>Telefone:</span>
             <input
               className={errors?.telefone && "input-error"}
-              type="text"
-              placeholder="Telefone"
-              {...register("telefone", { required: true })}
+              mask="(00)0000-0000"
+              placeholder="(99)99999-9999"
+              onKeyUp={handlePhone}
+              maxLength={11}
+              {...register("telefone")}
             />
-            {errors?.telefone?.type === "required" && (
-              <p className="error-message">O telefone é obrigatório.</p>
+            {errors?.telefone && (
+              <p className="error-message">{errors?.telefone.message}</p>
             )}
           </label>
           <label>
@@ -81,19 +115,19 @@ const SignUpUser = () => {
             <input
               type="checkbox"
               name="privacy-policy"
-              {...register("privacyTerms", { required: true })}
+              {...register("privacyTerms")}
               className={errors?.privacy && "input-error"}
             />
             <label>Concordo com os termos de privacidade.</label>
-            {errors?.privacyTerms?.type === "required" && (
+            {errors?.privacyTerms && (
               <p className="error-message-privacy">
-                É necessario concordar com os termos para se cadastrar.
+                {errors.privacyTerms.message}
               </p>
             )}
           </div>
         </div>
         <div className="submit-input">
-          <button onClick={handleSubmit(onSubmit)}>Enviar</button>
+          <button>Enviar</button>
         </div>
       </form>
     </div>
