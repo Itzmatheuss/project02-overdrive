@@ -1,11 +1,15 @@
 import "../styles/Company.css";
 //Icons
+import { Link } from "react-router-dom";
 import FirstPage from "@mui/icons-material/FirstPage";
 import ArrowForward from "@mui/icons-material/NavigateNext";
 import ArrowBack from "@mui/icons-material/NavigateBefore";
 import LastPage from "@mui/icons-material/LastPage";
 import SearchIcon from "@mui/icons-material/Search";
 import mData from "../MOCK_DATA_COMPANY.json";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Swal from "sweetalert2";
 
 import CompanyActions from "../actions/CompanyActions";
 import {
@@ -18,6 +22,26 @@ import {
 import { useMemo, useState } from "react";
 
 const Company = () => {
+  const handleDelete = () => {
+    Swal.fire({
+      title: "Tem certeza que deseja deletar ?",
+      text: "Esta é uma ação irreversivel !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, Deletar!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deletado!",
+          text: "A pessoa foi deletada.",
+          icon: "success",
+        });
+      }
+    });
+  };
+
   const data = useMemo(() => mData, []);
 
   /** @type import('@tanstack/react-table').columnDef<any>*/
@@ -37,29 +61,13 @@ const Company = () => {
       accessorKey: "cnpj",
       size: 100,
     },
-    {
-      header: "Data de abertura",
-      accessorKey: "date",
-      size: 100,
-    },
+
     {
       header: "Nome Fantasia",
       accessorKey: "fantasy_name",
+      size: 80,
     },
-    {
-      header: "Atividades Econômicas",
-      accessorKey: "cnae",
-    },
-    {
-      header: "Natureza Jurídica",
-      accessorKey: "nature",
-      size: 100,
-    },
-    {
-      header: "Endereço",
-      accessorKey: "address",
-      size: 100,
-    },
+
     {
       header: "Telefone",
       accessorKey: "phone",
@@ -78,7 +86,18 @@ const Company = () => {
     {
       header: "Ações",
       size: 90,
-      renderCell: (params) => <CompanyActions {...{ params }} />,
+      cell: (
+        <div className="action-buttons">
+          <Link to={`/users/edituser/1`}>
+            <button type="button" className="btn-edit">
+              <EditIcon />
+            </button>
+          </Link>
+          <button type="button" className="btn-del" onClick={handleDelete}>
+            <DeleteIcon />
+          </button>
+        </div>
+      ),
     },
   ];
 
@@ -98,7 +117,7 @@ const Company = () => {
   });
 
   return (
-    <div className="container">
+    <div class="container ">
       <div className="search">
         <input
           className="search-input"
@@ -111,24 +130,24 @@ const Company = () => {
           <SearchIcon />
         </span>
       </div>
-      <div className="container-users">
-        <table className="table" width={table.getTotalSize()}>
+      <div className="tabela table-responsive">
+        <div className="add">
+          <Link to="/signupcomp">
+            <button type="submit" className="btn-user">
+              Adicionar Empresa
+            </button>
+          </Link>
+        </div>
+        <table className="table table-hover table-bordered">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="tr">
+              <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="th" width={header.getSize()}>
+                  <th key={header.id}>
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext()
                     )}
-                    <div
-                      onMouseDown={header.getResizeHandler()}
-                      onTouchStart={header.getResizeHandler()}
-                      className={`resizer ${
-                        header.column.getIsResizing() ? "isResizing" : ""
-                      }`}
-                    ></div>
                   </th>
                 ))}
               </tr>
@@ -136,13 +155,9 @@ const Company = () => {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="tr">
+              <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="td"
-                    width={cell.column.getSize()}
-                  >
+                  <td className="w-auto h-auto p-2" key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
@@ -150,32 +165,32 @@ const Company = () => {
             ))}
           </tbody>
         </table>
-      </div>
-      <div className="btn-container">
-        <button
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.setPageIndex(0)}
-        >
-          <FirstPage />
-        </button>
-        <button
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          <ArrowForward />
-        </button>
-        <button
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          <ArrowBack />
-        </button>
-        <button
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-        >
-          <LastPage />
-        </button>
+        <div className="btn-container">
+          <button
+            disabled={!table.getCanPreviousPage()}
+            onClick={() => table.setPageIndex(0)}
+          >
+            <FirstPage />
+          </button>
+          <button
+            disabled={!table.getCanNextPage()}
+            onClick={() => table.nextPage()}
+          >
+            <ArrowForward />
+          </button>
+          <button
+            disabled={!table.getCanPreviousPage()}
+            onClick={() => table.previousPage()}
+          >
+            <ArrowBack />
+          </button>
+          <button
+            disabled={!table.getCanNextPage()}
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          >
+            <LastPage />
+          </button>
+        </div>
       </div>
     </div>
   );

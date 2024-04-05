@@ -5,8 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { userValidationSchema } from "../hooks/UserValidation";
 import { Link } from "react-router-dom";
-import ModelS from "../components/ModelS";
-import ModelE from "../components/ModelE";
 
 const SignUpUser = () => {
   const [empresas, setEmpresas] = useState([]);
@@ -77,8 +75,6 @@ const SignUpUser = () => {
 
   return (
     <div className="container-user">
-      <ModelE />
-      <ModelS />
       <form className="form" onSubmit={handleSubmit(handleFormSubmit)}>
         <h2>Alterar seus dados</h2>
         <div className="container-form">
