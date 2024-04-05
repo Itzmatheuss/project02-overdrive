@@ -32,7 +32,9 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="leftSide" id={openLinks ? "open" : "close"}>
-        <img src={Logo} alt="Logo" />
+        <Link to="/">
+          <img src={Logo} alt="Logo" />
+        </Link>
         <div className="hiddenLinks">
           <Link to="/">
             <HomeIcon />
