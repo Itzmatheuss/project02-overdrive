@@ -3,9 +3,9 @@ import { useForm } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 import { Link } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { companyValidationSchema } from "../validation/CompanyValidation";
+import { companyValidationSchema } from "../hooks/CompanyValidation";
 
-import ValidarCnpj from "../hooks/Validation";
+import ValidarCnpj from "../hooks/ValCpnj";
 
 const SignUpComp = () => {
   const {

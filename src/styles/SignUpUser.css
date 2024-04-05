@@ -71,12 +71,11 @@ select {
   padding: 10px 8px;
   font-weight: bold;
   cursor: pointer;
-  opacity: 0.8;
   font-size: 1.2em;
 }
 
-.container-user .form button {
-  width: 200px;
+.btnUser {
+  width: 150px;
   margin-top: 1em;
 }
 
@@ -86,7 +85,7 @@ select {
 }
 
 .container-user form button:hover {
-  opacity: 1;
+  background-color: #0794f3;
 }
 
 .container-user .btn-error {

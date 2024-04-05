@@ -1,18 +1,16 @@
 import "../styles/SignUpUser.css";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { userValidationSchema } from "../validation/UserValidation";
-
-import validarCpf from "../hooks/Mask";
+import { userValidationSchema } from "../hooks/UserValidation";
+import { Link } from "react-router-dom";
+import ModelS from "../components/ModelS";
+import ModelE from "../components/ModelE";
 
 const SignUpUser = () => {
   const {
     register,
     handleSubmit,
-    setFocus,
-    setValue,
     formState: { errors },
   } = useForm({ resolver: yupResolver(userValidationSchema) });
 
@@ -23,11 +21,19 @@ const SignUpUser = () => {
   };
 
   const handleCpf = (e) => {
+    let cpf = e.target.value;
+    cpf = cpf.replace(/\D/g, "");
+    e.target.value = cpf;
+
     let input = e.target;
     input.value = cpfMask(input.value);
   };
 
   const handlePhone = (e) => {
+    let phone = e.target.value;
+    phone = phone.replace(/\D/g, "");
+    e.target.value = phone;
+
     let input = e.target;
     input.value = phoneMask(input.value);
   };
@@ -39,9 +45,11 @@ const SignUpUser = () => {
     value = value.replace(/(\d)(\d{4})$/, "$1-$2");
     return value;
   };
+
   const cpfMask = (cpf) => {
     if (!cpf) return "";
-    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "$1.$2.$3-$4");
+    cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "$1.$2.$3-$4");
+    return cpf;
   };
 
   const handleFormSubmit = (formData) => {
@@ -50,6 +58,8 @@ const SignUpUser = () => {
 
   return (
     <div className="container-user">
+      <ModelE />
+      <ModelS />
       <form className="form" onSubmit={handleSubmit(handleFormSubmit)}>
         <h2>Insira seus dados</h2>
         <div className="container-form">
@@ -82,8 +92,7 @@ const SignUpUser = () => {
             <input
               className={errors?.cpf && "input-error"}
               placeholder="999.999.999-99"
-              mask="000.000.000-00"
-              maxLength={11}
+              maxLength={14}
               onKeyUp={handleCpf}
               {...register("cpf")}
             />
@@ -95,10 +104,9 @@ const SignUpUser = () => {
             <span>Telefone:</span>
             <input
               className={errors?.telefone && "input-error"}
-              mask="(00)0000-0000"
               placeholder="(99)99999-9999"
               onKeyUp={handlePhone}
-              maxLength={11}
+              maxLength={15}
               {...register("telefone")}
             />
             {errors?.telefone && (
@@ -127,7 +135,12 @@ const SignUpUser = () => {
           </div>
         </div>
         <div className="submit-input">
-          <button>Enviar</button>
+          <button className="btnUser">Enviar</button>
+          <Link to="/">
+            <button type="submit" className="btnUser">
+              Voltar
+            </button>
+          </Link>
         </div>
       </form>
     </div>

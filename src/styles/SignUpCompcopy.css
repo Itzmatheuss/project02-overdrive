@@ -15,15 +15,6 @@ body {
   justify-content: center;
   z-index: 10;
 }
-h2,
-.cadastro {
-  color: #fff;
-}
-
-#fade .spinner-border {
-  width: 60px;
-  height: 60px;
-}
 
 .hide {
   display: none !important;
@@ -38,11 +29,20 @@ h2,
   padding: 1.2em 0;
 }
 /* Form */
+h2,
+.cadastro {
+  color: #fff;
+}
+
 #address-form {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-color: #559fc7;
+  width: 800px;
+  height: 883px;
+  border-radius: 10px;
 }
 
 #address-form input {
@@ -53,6 +53,9 @@ h2,
 }
 
 #order-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 5rem;
 }
 #order-form-container select {
@@ -98,5 +101,5 @@ h2,
 }
 
 form .btCadastro:hover {
-  background-color: #0099ff;
+  background-color: #0794f3;
 }

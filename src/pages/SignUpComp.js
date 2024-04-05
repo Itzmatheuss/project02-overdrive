@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { companyValidationSchema } from "../validation/CompanyValidation";
+import { companyValidationSchema } from "../hooks/CompanyValidation";
 
 const SignUpComp = () => {
   const {
