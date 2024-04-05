@@ -35,6 +35,9 @@
   color: #fff;
   font-size: 0.7em;
 }
+.container-user select {
+  width: 100%;
+}
 
 .container-user .form input,
 select {

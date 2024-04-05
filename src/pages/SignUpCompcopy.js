@@ -12,6 +12,7 @@ const SignUpComp = () => {
     register,
     setValue,
     setFocus,
+    handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(companyValidationSchema) });
 
@@ -51,7 +52,7 @@ const SignUpComp = () => {
 
       if (newcnpj) {
         console.log("valido");
-        setFocus("dataA");
+        setFocus("dataAbertura");
       } else {
         console.log("invalido");
         window.alert("CNPJ INVÁLIDO! Favor inserir um cnpj válido.");
@@ -60,9 +61,13 @@ const SignUpComp = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(e);
+  const onSubmit = (data) => {
+    data.preventDefault();
+    console.log(data);
+  };
+
+  const handleFormSubmit = (formData) => {
+    onSubmit(formData);
   };
 
   const handlePhone = (e) => {
@@ -96,7 +101,7 @@ const SignUpComp = () => {
   };
 
   return (
-    <body>
+    <div>
       <div id="fade" className="hide">
         <div id="message" className="hide">
           <div className="alert alert-light" role="alert">
@@ -113,95 +118,119 @@ const SignUpComp = () => {
         </div>
       </div>
       <div id="order-form-container" className="my-md-4 px-md-0">
-        <form id="address-form" onSubmit={handleSubmit}>
+        <form id="address-form" onSubmit={handleSubmit(handleFormSubmit)}>
           <h2>Dados da empresa: </h2>
           <div className="row mb-3">
             <div className="col-12 col-sm-6">
               <div className="mb-3 form-floating">
                 <input
                   type="text"
-                  className="form-control shadow-none"
-                  placeholder="Insira o nome empresarial..."
-                  minLength={5}
-                  maxLength={255}
-                  required
+                  className={
+                    (errors?.companyname ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
+                  placeholder="Insira o nome da empresa"
+                  {...register("companyname")}
                 />
-                <label className="form-label">Nome Empresarial:</label>
+                <label className="form-label">Nome Da Empresa:</label>
               </div>
             </div>
+            {errors?.companyname && (
+              <p className="error-message">{errors?.companyname.message}</p>
+            )}
 
             <div className="col-12 col-sm-6">
               <div className=" form-floating">
                 <input
                   type="text"
-                  className="form-control shadow-none"
-                  placeholder="Insira o nome fantasia..."
-                  minLength={5}
-                  maxLength={255}
-                  required
+                  className={
+                    (errors?.fantasyname ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
+                  placeholder="Insira o nome fantasia"
+                  {...register("fantasyname")}
                 />
                 <label className="form-label">Nome Fantasia:</label>
               </div>
             </div>
+            {errors?.fantasyname && (
+              <p className="error-message">{errors?.fantasyname.message}</p>
+            )}
           </div>
 
           <div className="row mb-3">
             <div className="col-12 col-sm-6">
               <div className="mb-3 form-floating">
-                <IMaskInput
-                  className="form-control shadow-none"
+                <input
+                  className={
+                    (errors?.cnpj ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
                   mask="00.000.000/0000-00"
                   name="cnpj"
                   id="cnpj"
                   placeholder="Insira o CNPJ..."
-                  minLength={18}
-                  maxLength={18}
                   onKeyUp={valCnpj}
-                  required
+                  {...register("cnpj")}
                 />
                 <label htmlFor="cnpj">CNPJ:</label>
               </div>
             </div>
+            {errors?.cpnj && (
+              <p className="error-message">{errors?.cnpj.message}</p>
+            )}
 
             <div className="col-12 col-sm-6">
               <div className=" form-floating">
                 <input
                   type="date"
-                  className="form-control shadow-none"
-                  {...register("dataA")}
+                  className={
+                    (errors?.dataAbertura ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
+                  {...register("dataAbertura")}
                   placeholder="Insira a data de abertura da empresa..."
-                  required
                 />
                 <label className="form-label">Data de abertura:</label>
               </div>
             </div>
+            {errors?.dataAbertura && (
+              <p className="error-message">{errors?.dataAbertura.message}</p>
+            )}
           </div>
 
           <div className="row mb-3">
             <div className="col-12 col-sm-6">
               <div className="mb-3 form-floating">
-                <IMaskInput
+                <input
                   mask="00000-000"
                   type="text"
-                  className="form-control shadow-none"
+                  className={
+                    (errors?.cep ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
                   id="cep"
                   name="cep"
                   placeholder="CEP"
-                  maxLength={9}
-                  minLength={9}
                   onKeyUp={checkCEP}
-                  required
+                  {...register("cep")}
                 />
                 <label htmlFor="cep">CEP:</label>
               </div>
             </div>
+            {errors?.cep && (
+              <p className="error-message">{errors?.cep.message}</p>
+            )}
 
             <div className="col-12 col-sm-6">
               <div className=" form-floating">
                 <input
                   {...register("address")}
                   type="text"
-                  className="form-control shadow-none"
+                  className={
+                    (errors?.address ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
                   id="address"
                   name="address"
                   placeholder="Rua"
@@ -212,6 +241,9 @@ const SignUpComp = () => {
                 <label htmlFor="address">Rua</label>
               </div>
             </div>
+            {errors?.address && (
+              <p className="error-message">{errors?.address.message}</p>
+            )}
           </div>
 
           <div className="row mb-3">
@@ -220,16 +252,21 @@ const SignUpComp = () => {
                 <input
                   {...register("addressNumber")}
                   type="text"
-                  className="form-control shadow-none"
+                  className={
+                    (errors?.addressNumber ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
                   id="number"
                   name="number"
                   placeholder="Número da residência"
-                  required
                   data-input
                 />
                 <label htmlFor="number">Número:</label>
               </div>
             </div>
+            {errors?.addressNumber && (
+              <p className="error-message">{errors?.addressNumber.message}</p>
+            )}
 
             <div className="col-12 col-sm-6">
               <div className="form-floating">
@@ -252,7 +289,10 @@ const SignUpComp = () => {
                 <input
                   {...register("neighborhood")}
                   type="text"
-                  className="form-control shadow-none"
+                  className={
+                    (errors?.neighborhood ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
                   id="neighborhood"
                   name="neighborhood"
                   placeholder="Bairro"
@@ -263,13 +303,19 @@ const SignUpComp = () => {
                 <label htmlFor="neighborhood">Bairro</label>
               </div>
             </div>
+            {errors?.neighborhood && (
+              <p className="error-message">{errors?.neighborhood.message}</p>
+            )}
 
             <div className="col-12 col-sm-6">
               <div className="form-floating">
                 <input
                   {...register("city")}
                   type="text"
-                  className="form-control shadow-none"
+                  className={
+                    (errors?.city ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
                   id="city"
                   name="city"
                   placeholder="Cidade"
@@ -280,13 +326,20 @@ const SignUpComp = () => {
                 <label htmlFor="city">Cidade</label>
               </div>
             </div>
+            {errors?.city && (
+              <p className="error-message">{errors?.city.message}</p>
+            )}
           </div>
+
           <div className="row mb-3">
             <div className="col-12 col-sm-6">
               <div className=" mb-3">
                 <select
                   {...register("uf")}
-                  className="form-select shadow-none"
+                  className={
+                    (errors?.uf ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
                   disabled
                   required
                   data-input
@@ -322,20 +375,28 @@ const SignUpComp = () => {
                 </select>
               </div>
             </div>
+            {errors?.uf && (
+              <p className="error-message">{errors?.uf.message}</p>
+            )}
 
             <div className="col-sm-6">
               <div className="form-floating">
                 <input
-                  className="form-control shadow-none"
+                  className={
+                    (errors?.phone
+                      ? "input-error form-control shadow-none "
+                      : "") + "form-control shadow-none"
+                  }
                   onKeyUp={handlePhone}
                   placeholder="Insira o telefone..."
-                  minLength={15}
-                  maxLength={15}
-                  required
+                  {...register("phone")}
                 />
                 <label className="form-label">Telefone:</label>
               </div>
             </div>
+            {errors?.phone && (
+              <p className="error-message">{errors?.phone.message}</p>
+            )}
           </div>
 
           <div className="row mb-3">
@@ -343,45 +404,57 @@ const SignUpComp = () => {
               <div className="mb-3 form-floating">
                 <input
                   type="text"
-                  className="form-control shadow-none"
+                  className={
+                    (errors?.nj ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
                   placeholder="Insira a natureza jurídica da empresa..."
-                  minLength={3}
-                  maxLength={255}
-                  required
+                  {...register("nj")}
                 />
                 <label className="form-label">Natureza jurídica:</label>
               </div>
             </div>
+            {errors?.nj && (
+              <p className="error-message">{errors?.nj.message}</p>
+            )}
 
             <div className="col-sm-6">
               <div className="form-floating">
                 <input
                   type="text"
-                  className="form-control shadow-none"
+                  className={
+                    (errors?.atividadeEco ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
                   placeholder="Insira as atividades econômicas..."
-                  minLength={3}
-                  maxLength={255}
-                  required
+                  {...register("atividadeEco")}
                 />
                 <label className="form-label">Atividades Econômicas:</label>
               </div>
             </div>
+            {errors?.atividadeEco && (
+              <p className="error-message">{errors?.atividadeEco.message}</p>
+            )}
           </div>
 
           <div className="row mb-3">
             <div className="col-sm-6">
               <div className="mb-5 form-floating">
                 <input
-                  className="form-control shadow-none"
+                  className={
+                    (errors?.capital ? "input-error " : "") +
+                    "form-control shadow-none"
+                  }
                   placeholder="Insira o capital..."
-                  minLength={3}
-                  maxLength={18}
                   onInput={mascaraMoeda}
-                  required
+                  {...register("capital")}
                 />
                 <label className="form-label">Capital:</label>
               </div>
             </div>
+            {errors?.capital && (
+              <p className="error-message">{errors?.capital.message}</p>
+            )}
 
             <div className="col-sm-6">
               <div className="situacao">
@@ -391,7 +464,7 @@ const SignUpComp = () => {
                 <select
                   className="form-select shadow-none"
                   aria-label="Default select example"
-                  required
+                  {...register("status")}
                 >
                   <option value="1">Ativo</option>
                   <option value="2">Inativo</option>
@@ -399,6 +472,9 @@ const SignUpComp = () => {
                 </select>
               </div>
             </div>
+            {errors?.status && (
+              <p className="error-message">{errors?.status.message}</p>
+            )}
           </div>
 
           <div className="submit-input">
@@ -413,7 +489,7 @@ const SignUpComp = () => {
           </div>
         </form>
       </div>
-    </body>
+    </div>
   );
 };
 

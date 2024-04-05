@@ -17,6 +17,7 @@ const SignUpUser = () => {
   console.log({ errors });
 
   const onSubmit = (data) => {
+    data.preventDefault();
     console.log(data);
   };
 

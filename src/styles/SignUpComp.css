@@ -1,43 +1,64 @@
-.container-company {
+.container-box {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 100%;
   font-family: Georgia, "Times New Roman", Times, serif;
   background-image: url(../assets/build.jpg);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
 }
-
-.container-company form {
-  width: 400px;
+.container-company {
   display: flex;
-  flex-direction: column;
-  padding: 2em;
-  border-radius: 10px;
-  margin-right: 7%;
-  margin-top: -15px;
+  align-items: center;
+  justify-content: center;
 }
-.container-company .form h2 {
+
+.container-company form .container-formc {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 700px;
+  width: 100%;
+  background-color: #559fc7;
+  border-radius: 10px;
+  padding: 25px 30px;
+}
+.container-formc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container-company form h2 {
   text-align: center;
+  width: 80%;
   color: #fff;
 }
-.container-company .form label {
+.container-company .formc label {
   display: flex;
   flex-direction: column;
-  text-align: left;
   width: 80%;
 }
 
-.container-company .form label span {
+.container-company .formc label span {
   font-weight: bold;
   margin-bottom: 0.7em;
   color: #fff;
   font-size: 0.7em;
 }
 
-.container-company .form input,
+.container-formc .input-box-date {
+  width: 230px;
+}
+.container-formc .input-box-select {
+  width: 230px;
+}
+.container-formc select {
+  height: 46px;
+}
+
+.container-company .formc input,
 select {
   background-color: #e7e6e6;
   color: #000;
@@ -52,8 +73,11 @@ select {
 .container-company form input::placeholder {
   color: #aaa;
 }
+.container-company select {
+  width: 100%;
+}
 .container-company form select {
-  color: #292929;
+  color: #000;
 }
 .container-company .checkbox {
   display: flex;
@@ -64,7 +88,7 @@ select {
 .container-company .checkbox label {
   margin-top: 2px;
 }
-.container-company .form button {
+.container-company .formc button {
   background-color: #1488d6;
   color: #fff;
   border: none;
@@ -110,13 +134,21 @@ select {
 
 .container-company form .error-message {
   color: #fff916;
-  margin-top: -10px;
   font-size: 14px;
 }
 .container-company form .error-message-privacy {
   position: absolute;
   color: #fff916;
-  margin-top: 25px;
-  margin-left: 5px;
   font-size: 15px;
+}
+
+@media (max-width: 584px) {
+  .container-company form .container-formc {
+    max-width: 100%;
+  }
+}
+
+.container-company form input:disabled {
+  background-color: #fff;
+  cursor: not-allowed;
 }

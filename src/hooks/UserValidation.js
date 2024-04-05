@@ -3,11 +3,9 @@ import validarCpf from "./ValCpf";
 
 export const userValidationSchema = Yup.object().shape({
   name: Yup.string()
-    .min(3, "O campo deve ter no mínimo 3 caracteres")
-    .required("O nome é obrigatório."),
-  email: Yup.string()
-    .email("E-mail inválido")
-    .required("O email é obrigatório."),
+    .min(3, "Mínimo de 3 caracteres")
+    .required("Campo obrigatório."),
+  email: Yup.string().email("E-mail inválido").required("Campo obrigatório."),
   cpf: Yup.string()
     .test("validar-cpf", "CPF inválido", (value) => {
       if (!value) return false; // Retorna falso se o valor não estiver definido
@@ -18,7 +16,7 @@ export const userValidationSchema = Yup.object().shape({
       return validarCpf(cpf); // Retorna o resultado da validação do CPF
     })
     .min(11, "O cpf deve ter 11 caracteres")
-    .required("O cpf é obrigatório."),
+    .required("Campo obrigatório."),
   telefone: Yup.string()
     .test("validar-tel", "Número de telefone inválido", (value) => {
       if (!value) return false;
@@ -31,6 +29,6 @@ export const userValidationSchema = Yup.object().shape({
       return false;
     })
     .min(11, "O telefone deve ter 11 dígitos")
-    .required("O telefone é obrigatório."),
+    .required("Campo obrigatório."),
   privacyTerms: Yup.bool().oneOf([true], "É necessário aceitar os termos."),
 });

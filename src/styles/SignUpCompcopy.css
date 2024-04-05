@@ -23,7 +23,13 @@ body {
 #message {
   width: 40%;
 }
-
+.input-error {
+  border: 1px solid red !important;
+}
+.error-message {
+  color: #fff916;
+  font-size: 15px;
+}
 .alert.alert-light p {
   border-bottom: 1px solid #333;
   padding: 1.2em 0;
@@ -39,10 +45,6 @@ h2,
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #559fc7;
-  width: 800px;
-  height: 883px;
-  border-radius: 10px;
 }
 
 #address-form input {
