@@ -77,15 +77,15 @@ const SignUpUser = () => {
             )}
           </label>
           <label>
-            <span>Email:</span>
+            <span>Nome de Usúario:</span>
             <input
-              className={errors?.email && "input-error"}
-              type="email"
-              placeholder="Email"
-              {...register("email")}
+              className={errors?.username && "input-error"}
+              type="text"
+              placeholder="Nome de Usúario"
+              {...register("username")}
             />
-            {errors?.email && (
-              <p className="error-message">{errors?.email.message}</p>
+            {errors?.username && (
+              <p className="error-message">{errors?.username.message}</p>
             )}
           </label>
           <label>
@@ -136,7 +136,7 @@ const SignUpUser = () => {
           </div>
         </div>
         <div className="submit-input">
-          <button className="btnUser">Enviar</button>
+          <button className="btnUser">Cadastrar</button>
           <Link to="/">
             <button type="submit" className="btnUser">
               Voltar

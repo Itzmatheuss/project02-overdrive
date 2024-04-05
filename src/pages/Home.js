@@ -9,7 +9,7 @@ const Home = () => {
         <h2>Cadastre sua empresa ou funcionário aqui.</h2>
 
         <div className="botao">
-          <Link to="/signupcompcopy">
+          <Link to="/signupcomp">
             <button>Cadastrar Empresa </button>
           </Link>
           <Link to="/signupuser">

@@ -5,7 +5,9 @@ export const userValidationSchema = Yup.object().shape({
   name: Yup.string()
     .min(3, "Mínimo de 3 caracteres")
     .required("Campo obrigatório."),
-  email: Yup.string().email("E-mail inválido").required("Campo obrigatório."),
+  username: Yup.string()
+    .min(3, "Mínimo de 3 caracteres")
+    .required("Campo obrigatório."),
   cpf: Yup.string()
     .test("validar-cpf", "CPF inválido", (value) => {
       if (!value) return false; // Retorna falso se o valor não estiver definido
