@@ -1,4 +1,5 @@
 import "../styles/Users.css";
+import { Link } from "react-router-dom";
 //Icons
 import FirstPage from "@mui/icons-material/FirstPage";
 import ArrowForward from "@mui/icons-material/NavigateNext";
@@ -6,6 +7,9 @@ import ArrowBack from "@mui/icons-material/NavigateBefore";
 import LastPage from "@mui/icons-material/LastPage";
 import SearchIcon from "@mui/icons-material/Search";
 import mData from "../MOCK_DATA_USER.json";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import {
   useReactTable,
   getCoreRowModel,
@@ -25,7 +29,7 @@ const Users = () => {
     {
       header: "ID",
       accessorKey: "id",
-      size: 50,
+      size: 60,
     },
     {
       header: "Nome",
@@ -50,8 +54,19 @@ const Users = () => {
     },
     {
       header: "Ações",
-      size: 90,
-      renderCell: (params) => <UsersActions {...{ params }} />,
+      size: 50,
+      cell: (
+        <div className="action-buttons">
+          <Link to={`/users/edituser/1`}>
+            <button type="button" className="btn-edit">
+              <EditIcon />
+            </button>
+          </Link>
+          <button type="button" className="btn-del">
+            <DeleteIcon />
+          </button>
+        </div>
+      ),
     },
   ];
 
@@ -71,7 +86,7 @@ const Users = () => {
   });
 
   return (
-    <div className="container">
+    <div class="container ">
       <div className="search">
         <input
           className="search-input"
@@ -84,24 +99,24 @@ const Users = () => {
           <SearchIcon />
         </span>
       </div>
-      <div className="container-users">
-        <table className="table" width={table.getTotalSize()}>
+      <div className="tabela table-responsive">
+        <div className="add">
+          <Link to="/signupuser">
+            <button type="submit" className="btn-user">
+              Adicionar pessoa
+            </button>
+          </Link>
+        </div>
+        <table className="table table-hover table-bordered">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="tr">
+              <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="th" width={header.getSize()}>
+                  <th key={header.id}>
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext()
                     )}
-                    <div
-                      onMouseDown={header.getResizeHandler()}
-                      onTouchStart={header.getResizeHandler()}
-                      className={`resizer ${
-                        header.column.getIsResizing() ? "isResizing" : ""
-                      }`}
-                    ></div>
                   </th>
                 ))}
               </tr>
@@ -109,13 +124,9 @@ const Users = () => {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="tr">
+              <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="td"
-                    width={cell.column.getSize()}
-                  >
+                  <td className="w-auto h-auto p-2" key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
@@ -123,32 +134,32 @@ const Users = () => {
             ))}
           </tbody>
         </table>
-      </div>
-      <div className="btn-container">
-        <button
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.setPageIndex(0)}
-        >
-          <FirstPage />
-        </button>
-        <button
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          <ArrowForward />
-        </button>
-        <button
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          <ArrowBack />
-        </button>
-        <button
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-        >
-          <LastPage />
-        </button>
+        <div className="btn-container">
+          <button
+            disabled={!table.getCanPreviousPage()}
+            onClick={() => table.setPageIndex(0)}
+          >
+            <FirstPage />
+          </button>
+          <button
+            disabled={!table.getCanNextPage()}
+            onClick={() => table.nextPage()}
+          >
+            <ArrowForward />
+          </button>
+          <button
+            disabled={!table.getCanPreviousPage()}
+            onClick={() => table.previousPage()}
+          >
+            <ArrowBack />
+          </button>
+          <button
+            disabled={!table.getCanNextPage()}
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          >
+            <LastPage />
+          </button>
+        </div>
       </div>
     </div>
   );

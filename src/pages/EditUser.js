@@ -1,4 +1,5 @@
 import "../styles/SignUpUser.css";
+import { useState, useEffect } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -8,6 +9,8 @@ import ModelS from "../components/ModelS";
 import ModelE from "../components/ModelE";
 
 const SignUpUser = () => {
+  const [empresas, setEmpresas] = useState([]);
+
   const {
     register,
     handleSubmit,
@@ -20,6 +23,21 @@ const SignUpUser = () => {
     data.preventDefault();
     console.log(data);
   };
+  const getData = () => {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:3000/company", requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleCpf = (e) => {
     let cpf = e.target.value;
@@ -121,7 +139,19 @@ const SignUpUser = () => {
           <label>
             <span>Status:</span>
             <select {...register("status")}>
+              <option value="1">Inativo</option>
               <option value="2">Pendente</option>
+              <option value="3">Ativo</option>
+            </select>
+          </label>
+          <label>
+            <span>Empresas:</span>
+            <select {...register("empresaId")}>
+              {empresas.map((empresa) => (
+                <option value={empresa.id} key={empresa.id}>
+                  {empresa.fantasy_name}
+                </option>
+              ))}
             </select>
           </label>
           <div className="checkbox">
