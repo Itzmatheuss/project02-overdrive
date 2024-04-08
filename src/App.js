@@ -19,17 +19,19 @@ function App() {
     <div className="App">
       <Router>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/signupcomp" element={<SignUpComp />} />
-          <Route path="/signupcomp" element={<SignUpCompcopy />} />
-          <Route path="/signupuser" element={<SignUpUser />} />
-          <Route path="/company" element={<Company />} />
-          <Route path="/company/editcompany/:id" element={<EditCompany />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/users/edituser/:id" element={<EditUser />} />
-          <Route path="/action" element={<UsersActions />} />
-        </Routes>
+        <div>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/signupcomp" element={<SignUpComp />} />
+            <Route path="/signupcomp" element={<SignUpCompcopy />} />
+            <Route path="/signupuser" element={<SignUpUser />} />
+            <Route path="/company" element={<Company />} />
+            <Route path="/company/editcompany/:id" element={<EditCompany />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/users/edituser/:id" element={<EditUser />} />
+            <Route path="/action" element={<UsersActions />} />
+          </Routes>
+        </div>
         <Footer />
       </Router>
     </div>

@@ -18,7 +18,7 @@ export const companyValidationSchema = Yup.object().shape({
       if (originalValue === "") return null;
       return value;
     })
-    .max(new Date(), "Não é possível incluir uma data futura")
+    .max(new Date(), "Data inválida")
     .test("empty-date", "Data obrigatória", function (value) {
       // Verifica se o valor é vazio
       if (!value || value === "") {
