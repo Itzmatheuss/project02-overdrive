@@ -11,7 +11,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 
-import CompanyActions from "../actions/CompanyActions";
 import {
   useReactTable,
   getCoreRowModel,
@@ -35,7 +34,7 @@ const Company = () => {
       if (result.isConfirmed) {
         Swal.fire({
           title: "Deletado!",
-          text: "A pessoa foi deletada.",
+          text: "A empresa foi deletada com sucesso.",
           icon: "success",
         });
       }
@@ -63,8 +62,8 @@ const Company = () => {
     },
 
     {
-      header: "Nome Fantasia",
-      accessorKey: "fantasy_name",
+      header: "Endereço",
+      accessorKey: "address",
       size: 80,
     },
 
@@ -88,7 +87,7 @@ const Company = () => {
       size: 90,
       cell: (
         <div className="action-buttons">
-          <Link to={`/users/edituser/1`}>
+          <Link to={`/company/editcompany/1`}>
             <button type="button" className="btn-edit">
               <EditIcon />
             </button>
@@ -117,7 +116,7 @@ const Company = () => {
   });
 
   return (
-    <div class="container ">
+    <div className="container ">
       <div className="search">
         <input
           className="search-input"

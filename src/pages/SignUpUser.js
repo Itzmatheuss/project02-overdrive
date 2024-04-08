@@ -3,9 +3,11 @@ import "../styles/SignUpUser.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { userValidationSchema } from "../hooks/UserValidation";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const SignUpUser = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -15,7 +17,6 @@ const SignUpUser = () => {
   console.log({ errors });
 
   const onSubmit = (data) => {
-    data.preventDefault();
     console.log(data);
   };
 
@@ -53,6 +54,12 @@ const SignUpUser = () => {
 
   const handleFormSubmit = (formData) => {
     onSubmit(formData);
+    Swal.fire({
+      title: "Cadastro efetuado com sucesso!",
+      text: "",
+      icon: "success",
+    });
+    navigate("/users");
   };
 
   return (

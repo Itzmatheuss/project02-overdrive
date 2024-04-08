@@ -1,12 +1,13 @@
 import "../styles/SignUpComp.css";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { companyValidationSchema } from "../hooks/CompanyValidation";
-
+import Swal from "sweetalert2";
 import ValidarCnpj from "../hooks/ValCpnj";
 
 const SignUpComp = () => {
+  const navigate = useNavigate();
   const {
     register,
     setValue,
@@ -70,6 +71,12 @@ const SignUpComp = () => {
 
   const handleFormSubmit = (formData) => {
     onSubmit(formData);
+    Swal.fire({
+      title: "Cadastro efetuado com sucesso!",
+      text: "",
+      icon: "success",
+    });
+    navigate("/company");
   };
 
   const handlePhone = (e) => {
@@ -135,13 +142,15 @@ const SignUpComp = () => {
               <label>
                 <span>Nome:</span>
                 <input
-                  className={errors?.companyname && "input-error"}
+                  className={errors?.companyname && "input-errorc"}
                   type="text"
                   placeholder="Nome"
                   {...register("companyname", { required: true })}
                 />
                 {errors?.companyname && (
-                  <p className="error-message">{errors?.companyname.message}</p>
+                  <p className="error-messagec">
+                    {errors?.companyname.message}
+                  </p>
                 )}
               </label>
             </div>
@@ -149,13 +158,15 @@ const SignUpComp = () => {
               <label>
                 <span>Nome Fantasia</span>
                 <input
-                  className={errors?.fantasyname && "input-error"}
+                  className={errors?.fantasyname && "input-errorc"}
                   type="text"
                   placeholder="Nome Fantasia"
                   {...register("fantasyname", { required: true })}
                 />
                 {errors?.fantasyname && (
-                  <p className="error-message">{errors?.fantasyname.message}</p>
+                  <p className="error-messagec">
+                    {errors?.fantasyname.message}
+                  </p>
                 )}
               </label>
             </div>
@@ -163,12 +174,12 @@ const SignUpComp = () => {
               <label>
                 <span>Data de abertura:</span>
                 <input
-                  className={errors?.dataAbertura && "input-error"}
+                  className={errors?.dataAbertura && "input-errorc"}
                   type="date"
                   {...register("dataAbertura", { required: true })}
                 />
                 {errors?.dataAbertura && (
-                  <p className="error-message">
+                  <p className="error-messagec">
                     {errors?.dataAbertura.message}
                   </p>
                 )}
@@ -178,7 +189,7 @@ const SignUpComp = () => {
               <label>
                 <span>CNPJ:</span>
                 <input
-                  className={errors?.cnpj && "input-error"}
+                  className={errors?.cnpj && "input-errorc"}
                   mask="00. 000. 000/0001-00"
                   name="cnpj"
                   id="cnpj"
@@ -187,7 +198,7 @@ const SignUpComp = () => {
                   {...register("cnpj", { required: true })}
                 />
                 {errors?.cnpj && (
-                  <p className="error-message">{errors?.cnpj.message}</p>
+                  <p className="error-messagec">{errors?.cnpj.message}</p>
                 )}
               </label>
             </div>
@@ -195,14 +206,14 @@ const SignUpComp = () => {
               <label>
                 <span>Atividade Econômica (CNAE):</span>
                 <input
-                  className={errors?.atividadeEco && "input-error"}
+                  className={errors?.atividadeEco && "input-errorc"}
                   mask="0000-0"
                   onKeyUp={handleCnae}
                   placeholder="CNAE"
                   {...register("atividadeEco", { required: true })}
                 />
                 {errors?.atividadeEco && (
-                  <p className="error-message">
+                  <p className="error-messagec">
                     {errors?.atividadeEco.message}
                   </p>
                 )}
@@ -212,13 +223,13 @@ const SignUpComp = () => {
               <label>
                 <span>Natureza Jurídica:</span>
                 <input
-                  className={errors?.nj && "input-error"}
+                  className={errors?.nj && "input-errorc"}
                   type="text"
                   placeholder="Natureza Jurídica"
                   {...register("nj", { required: true })}
                 />
                 {errors?.nj && (
-                  <p className="error-message">{errors?.nj.message}</p>
+                  <p className="error-messagec">{errors?.nj.message}</p>
                 )}
               </label>
             </div>
@@ -226,7 +237,7 @@ const SignUpComp = () => {
               <label>
                 <span>Digite seu CEP:</span>
                 <input
-                  className={errors?.cep && "input-error"}
+                  className={errors?.cep && "input-errorc"}
                   mask="00000-000"
                   placeholder="CEP"
                   maxLength={9}
@@ -234,7 +245,7 @@ const SignUpComp = () => {
                   {...register("cep", { required: true })}
                 />
                 {errors?.cep && (
-                  <p className="error-message">{errors?.cep.message}</p>
+                  <p className="error-messagec">{errors?.cep.message}</p>
                 )}
               </label>
             </div>
@@ -242,14 +253,14 @@ const SignUpComp = () => {
               <label>
                 <span>Cidade:</span>
                 <input
-                  className={errors?.city && "input-error"}
+                  className={errors?.city && "input-errorc"}
                   type="text"
                   disabled
                   placeholder="Cidade"
                   {...register("city", { required: true })}
                 />
                 {errors?.city && (
-                  <p className="error-message">{errors?.city.message}</p>
+                  <p className="error-messagec">{errors?.city.message}</p>
                 )}
               </label>
             </div>
@@ -257,14 +268,14 @@ const SignUpComp = () => {
               <label>
                 <span>Rua:</span>
                 <input
-                  className={errors?.address && "input-error"}
+                  className={errors?.address && "input-errorc"}
                   type="text"
                   disabled
                   placeholder="Rua"
                   {...register("address", { required: true })}
                 />
                 {errors?.address && (
-                  <p className="error-message">{errors?.address.message}</p>
+                  <p className="error-messagec">{errors?.address.message}</p>
                 )}
               </label>
             </div>
@@ -272,14 +283,14 @@ const SignUpComp = () => {
               <label>
                 <span>Bairro:</span>
                 <input
-                  className={errors?.neighborhood && "input-error"}
+                  className={errors?.neighborhood && "input-errorc"}
                   type="text"
                   disabled
                   placeholder="Bairro"
                   {...register("neighborhood", { required: true })}
                 />
                 {errors?.neighborhood && (
-                  <p className="error-message">
+                  <p className="error-messagec">
                     {errors?.neighborhood.message}
                   </p>
                 )}
@@ -289,13 +300,14 @@ const SignUpComp = () => {
               <label>
                 <span>Número:</span>
                 <input
-                  className={errors?.addressNumber && "input-error"}
+                  className={errors?.addressNumber && "input-errorc"}
                   type="text"
                   placeholder="Número"
+                  maxLength={15}
                   {...register("addressNumber", { required: true })}
                 />
                 {errors?.addressNumber && (
-                  <p className="error-message">
+                  <p className="error-messagec">
                     {errors?.addressNumber.message}
                   </p>
                 )}
@@ -307,7 +319,7 @@ const SignUpComp = () => {
                 <select
                   {...register("uf")}
                   className={
-                    (errors?.uf ? "input-error " : "") +
+                    (errors?.uf ? "input-errorc " : "") +
                     "form-control shadow-none"
                   }
                   disabled
@@ -345,7 +357,7 @@ const SignUpComp = () => {
                 </select>
 
                 {errors?.uf && (
-                  <p className="error-message">{errors?.uf.message}</p>
+                  <p className="error-messagec">{errors?.uf.message}</p>
                 )}
               </label>
             </div>
@@ -359,13 +371,14 @@ const SignUpComp = () => {
               <label>
                 <span>Telefone:</span>
                 <input
-                  className={errors?.phone && "input-error"}
+                  className={errors?.phone && "input-errorc"}
                   onKeyUp={handlePhone}
+                  maxLength={15}
                   placeholder="(99)9999-9999"
                   {...register("phone", { required: true })}
                 />
                 {errors?.phone && (
-                  <p className="error-message">{errors?.phone.message}</p>
+                  <p className="error-messagec">{errors?.phone.message}</p>
                 )}
               </label>
             </div>
@@ -373,14 +386,14 @@ const SignUpComp = () => {
               <label>
                 <span>Capital:</span>
                 <input
-                  className={errors?.capital && "input-error"}
+                  className={errors?.capital && "input-errorc"}
                   type="text"
                   onInput={mascaraMoeda}
                   placeholder="Capital R$"
                   {...register("capital", { required: true })}
                 />
                 {errors?.capital && (
-                  <p className="error-message">{errors?.capital.message}</p>
+                  <p className="error-messagec">{errors?.capital.message}</p>
                 )}
               </label>
             </div>

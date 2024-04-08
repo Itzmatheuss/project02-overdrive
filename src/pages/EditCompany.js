@@ -6,7 +6,7 @@ import { companyValidationSchema } from "../hooks/CompanyValidation";
 
 import ValidarCnpj from "../hooks/ValCpnj";
 
-const SignUpComp = () => {
+const EditComp = () => {
   const {
     register,
     setValue,
@@ -425,4 +425,4 @@ const SignUpComp = () => {
   );
 };
 
-export default SignUpComp;
+export default EditComp;

@@ -35,7 +35,7 @@ const Users = () => {
       if (result.isConfirmed) {
         Swal.fire({
           title: "Deletado!",
-          text: "A pessoa foi deletada.",
+          text: "Usúario deletado com sucesso.",
           icon: "success",
         });
       }
@@ -106,7 +106,7 @@ const Users = () => {
   });
 
   return (
-    <div class="container ">
+    <div className="container ">
       <div className="search">
         <input
           className="search-input"

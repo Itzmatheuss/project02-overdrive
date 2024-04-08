@@ -4,13 +4,22 @@ import { useState, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { userValidationSchema } from "../hooks/UserValidation";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
-const SignUpUser = () => {
+import mData from "../MOCK_DATA_COMPANY.json";
+
+const EditUser = () => {
   const [empresas, setEmpresas] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setEmpresas(mData);
+  }, []);
 
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(userValidationSchema) });
@@ -18,24 +27,9 @@ const SignUpUser = () => {
   console.log({ errors });
 
   const onSubmit = (data) => {
-    data.preventDefault();
     console.log(data);
+    navigate("/users");
   };
-  const getData = () => {
-    var requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
-
-    fetch("http://localhost:3000/company", requestOptions)
-      .then((response) => response.json())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const handleCpf = (e) => {
     let cpf = e.target.value;
@@ -71,6 +65,12 @@ const SignUpUser = () => {
 
   const handleFormSubmit = (formData) => {
     onSubmit(formData);
+    Swal.fire({
+      title: "Usúario alterado com sucesso!",
+      text: "",
+      icon: "success",
+    });
+    navigate("/users");
   };
 
   return (
@@ -140,16 +140,18 @@ const SignUpUser = () => {
               <option value="3">Ativo</option>
             </select>
           </label>
-          <label>
-            <span>Empresas:</span>
-            <select {...register("empresaId")}>
-              {empresas.map((empresa) => (
-                <option value={empresa.id} key={empresa.id}>
-                  {empresa.fantasy_name}
-                </option>
-              ))}
-            </select>
-          </label>
+          {watch("status") === "3" && (
+            <label>
+              <span>Empresas:</span>
+              <select {...register("empresaId")}>
+                {empresas.map((empresa) => (
+                  <option key={empresa.id} value={empresa.id}>
+                    {empresa.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <div className="checkbox">
             <input
               type="checkbox"
@@ -178,4 +180,4 @@ const SignUpUser = () => {
   );
 };
 
-export default SignUpUser;
+export default EditUser;

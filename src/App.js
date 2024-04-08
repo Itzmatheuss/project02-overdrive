@@ -22,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signupcomp" element={<SignUpComp />} />
+          <Route path="/signupcomp" element={<SignUpCompcopy />} />
           <Route path="/signupuser" element={<SignUpUser />} />
           <Route path="/company" element={<Company />} />
           <Route path="/company/editcompany/:id" element={<EditCompany />} />
