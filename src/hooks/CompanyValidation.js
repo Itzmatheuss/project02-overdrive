@@ -1,15 +1,17 @@
 import * as Yup from "yup";
+import ValidarCnpj from "./ValCpnj";
 
 export const companyValidationSchema = Yup.object().shape({
   companyname: Yup.string()
+    .required("Campo obrigatório.")
     .min(5, "Mínimo de 5 caracteres")
-    .max(30, "Máximo de 30 caracteres")
-    .required("Campo obrigatório."),
+    .max(30, "Máximo de 30 caracteres"),
   fantasyname: Yup.string()
+    .required("Campo obrigatório.")
     .min(5, "Mínimo de 5 caracteres")
-    .max(40, "Máximo 40 caracteres")
-    .required("Campo obrigatório."),
+    .max(40, "Máximo 40 caracteres"),
   dataAbertura: Yup.date()
+    .required("Data obrigatória")
     .nullable()
     .transform((value, originalValue) => {
       // Se o valor for uma string vazia, retorna null
@@ -17,7 +19,6 @@ export const companyValidationSchema = Yup.object().shape({
       return value;
     })
     .max(new Date(), "Não é possível incluir uma data futura")
-    .required("Data obrigatória")
     .test("empty-date", "Data obrigatória", function (value) {
       // Verifica se o valor é vazio
       if (!value || value === "") {
@@ -27,24 +28,40 @@ export const companyValidationSchema = Yup.object().shape({
       return true;
     }),
   cnpj: Yup.string()
-    .length(18, "O CNPJ deve ter 14 dígitos")
-    .required("Campo obrigatório."),
+    .required("Campo obrigatório.")
+    .min(14, "O CNPJ deve ter 14 dígitos")
+    .test("validar-cnpj", "CNPJ inválido", function (value) {
+      if (!value) return false; // Retorna falso se o valor não estiver definido
+      const cnpj = value.replace(/\D/g, ""); // Remove caracteres não numéricos
+      if (cnpj.length !== 14 || !/^\d{14}$/.test(cnpj)) {
+        console.log(cnpj);
+        return false; // Retorna falso se o cnpj não tiver 14 dígitos ou conter caracteres não numéricos
+      }
+      console.log(ValidarCnpj(cnpj));
+      return ValidarCnpj(cnpj); // Retorna o resultado da validação do CPF
+    }),
   atividadeEco: Yup.string()
+    .required("Campo obrigatório.")
     .length(6, "Deve conter 5 digitos")
-    .required("Campo obrigatório."),
-  nj: Yup.string()
-
-    .length(14, "O telefone deve ter 10 ou 11 dígitos")
-    .required("Campo obrigatório."),
+    .test("validar-cnae", "CNAE inválido", (value) => {
+      if (!value) return false;
+      if (value.match(/\d{4}-\d$/)) {
+        return true;
+      }
+    }),
   cep: Yup.string()
-    .length(8, "O Cep deve ter 8 digitos")
-    .required("Campo obrigatório."),
-  city: Yup.string().required("Campo obrigatória."),
-  address: Yup.string().required("Campo obrigatória."),
+    .required("Campo obrigatório.")
+    .length(9, "O Cep deve ter 8 digitos")
+    .test("validar-cep", "CEP inválido", (value) => {
+      if (!value) return false;
+      if (value.match(/\d{5}-\d{3}$/)) {
+        return true;
+      }
+    }),
   addressNumber: Yup.string().required("Campo obrigatório."),
-  neighborhood: Yup.string().required("Campo obrigatório."),
-  uf: Yup.string().required("Campo obrigatório."),
   phone: Yup.string()
+    .required("Campo obrigatório.")
+    .min(11, "O telefone deve ter 11 dígitos")
     .test("validar-tel", "Número de telefone inválido", (value) => {
       if (!value) return false;
       if (
@@ -54,9 +71,7 @@ export const companyValidationSchema = Yup.object().shape({
         return true;
       }
       return false;
-    })
-    .min(11, "O telefone deve ter 11 dígitos")
-    .required("Campo obrigatório."),
+    }),
   nj: Yup.string().required("Campo obrigatória."),
   capital: Yup.string().required("Campo obrigatório."),
 });

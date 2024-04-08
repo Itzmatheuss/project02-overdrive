@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { companyValidationSchema } from "../hooks/CompanyValidation";
 import Swal from "sweetalert2";
-import ValidarCnpj from "../hooks/ValCpnj";
+import { useMask } from "../hooks/Masks";
 
 const SignUpComp = () => {
   const navigate = useNavigate();
@@ -15,6 +15,8 @@ const SignUpComp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(companyValidationSchema) });
+
+  const { maskCnae, phoneMask, maskCep, maskCurrency, maskCnpj } = useMask();
 
   const checkCEP = (e) => {
     let value = e.target.value;
@@ -46,23 +48,17 @@ const SignUpComp = () => {
           }
         });
     }
+    let input = e.target;
+    input.value = maskCep(input.value);
   };
 
   const valCnpj = (e) => {
-    const cnpj = e.target.value.replace(/\D/g, "");
-    if (cnpj.length === 14) {
-      console.log(cnpj);
-      const newcnpj = ValidarCnpj(cnpj);
+    let cnpj = e.target.value;
+    cnpj = cnpj.replace(/\D/g, "");
+    e.target.value = cnpj;
 
-      if (newcnpj) {
-        console.log("valido");
-        setFocus("dataAbertura");
-      } else {
-        console.log("invalido");
-        window.alert("CNPJ INVÁLIDO! Favor inserir um cnpj válido.");
-        document.getElementById("cnpj").value = "";
-      }
-    }
+    let input = e.target;
+    input.value = maskCnpj(input.value);
   };
 
   const onSubmit = (data) => {
@@ -88,13 +84,6 @@ const SignUpComp = () => {
     input.value = phoneMask(input.value);
   };
 
-  const phoneMask = (value) => {
-    if (!value) return "";
-    value = value.replace(/\D/g, "");
-    value = value.replace(/(\d{2})(\d)/, "($1) $2");
-    value = value.replace(/(\d)(\d{4})$/, "$1-$2");
-    return value;
-  };
   const mascaraMoeda = (e) => {
     const onlyDigits = e.target.value
       .split("")
@@ -103,13 +92,6 @@ const SignUpComp = () => {
       .padStart(3, "0");
     const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2);
     e.target.value = maskCurrency(digitsFloat);
-  };
-
-  const maskCurrency = (valor, locale = "pt-BR", currency = "BRL") => {
-    return new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency,
-    }).format(valor);
   };
 
   const handleCnae = (e) => {
@@ -121,17 +103,6 @@ const SignUpComp = () => {
     input.value = maskCnae(input.value);
   };
 
-  const maskCnae = (e) => {
-    let digits = e.replace(/\D/g, "");
-
-    // Aplica a máscara "0000-0"
-    if (digits.length > 4) {
-      let maskC = digits.slice(0, 4) + "-" + digits.slice(4, 5);
-      return maskC;
-    }
-
-    return digits;
-  };
   return (
     <div className="container-box">
       <div className="container-company">

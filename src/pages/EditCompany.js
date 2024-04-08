@@ -1,10 +1,10 @@
 import "../styles/SignUpComp.css";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { companyValidationSchema } from "../hooks/CompanyValidation";
-
-import ValidarCnpj from "../hooks/ValCpnj";
+import { useMask } from "../hooks/Masks";
+import Swal from "sweetalert2";
 
 const EditComp = () => {
   const {
@@ -14,6 +14,9 @@ const EditComp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(companyValidationSchema) });
+
+  const navigate = useNavigate();
+  const { maskCnae, phoneMask, maskCep, maskCurrency, maskCnpj } = useMask();
 
   const checkCEP = (e) => {
     let value = e.target.value;
@@ -28,7 +31,6 @@ const EditComp = () => {
         .then((data) => {
           console.log(data);
           if (data.erro) {
-            window.alert("CEP inválido, tente novamente!");
             document.getElementById("cep").value = "";
             setFocus("cep");
             setValue("address", data.logradouro);
@@ -45,23 +47,17 @@ const EditComp = () => {
           }
         });
     }
+    let input = e.target;
+    input.value = maskCep(input.value);
   };
-
+  // 60.701.190/0001-04
   const valCnpj = (e) => {
-    const cnpj = e.target.value.replace(/\D/g, "");
-    if (cnpj.length === 14) {
-      console.log(cnpj);
-      const newcnpj = ValidarCnpj(cnpj);
+    let cnpj = e.target.value;
+    cnpj = cnpj.replace(/\D/g, "");
+    e.target.value = cnpj;
 
-      if (newcnpj) {
-        console.log("valido");
-        setFocus("dataAbertura");
-      } else {
-        console.log("invalido");
-        window.alert("CNPJ INVÁLIDO! Favor inserir um cnpj válido.");
-        document.getElementById("cnpj").value = "";
-      }
-    }
+    let input = e.target;
+    input.value = maskCnpj(input.value);
   };
 
   const onSubmit = (data) => {
@@ -70,6 +66,12 @@ const EditComp = () => {
 
   const handleFormSubmit = (formData) => {
     onSubmit(formData);
+    Swal.fire({
+      title: "Empresa alterada com sucesso!",
+      text: "",
+      icon: "success",
+    });
+    navigate("/company");
   };
 
   const handlePhone = (e) => {
@@ -81,13 +83,6 @@ const EditComp = () => {
     input.value = phoneMask(input.value);
   };
 
-  const phoneMask = (value) => {
-    if (!value) return "";
-    value = value.replace(/\D/g, "");
-    value = value.replace(/(\d{2})(\d)/, "($1) $2");
-    value = value.replace(/(\d)(\d{4})$/, "$1-$2");
-    return value;
-  };
   const mascaraMoeda = (e) => {
     const onlyDigits = e.target.value
       .split("")
@@ -96,13 +91,6 @@ const EditComp = () => {
       .padStart(3, "0");
     const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2);
     e.target.value = maskCurrency(digitsFloat);
-  };
-
-  const maskCurrency = (valor, locale = "pt-BR", currency = "BRL") => {
-    return new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency,
-    }).format(valor);
   };
 
   const handleCnae = (e) => {
@@ -114,17 +102,6 @@ const EditComp = () => {
     input.value = maskCnae(input.value);
   };
 
-  const maskCnae = (e) => {
-    let digits = e.replace(/\D/g, "");
-
-    // Aplica a máscara "0000-0"
-    if (digits.length > 4) {
-      let maskC = digits.slice(0, 4) + "-" + digits.slice(4, 5);
-      return maskC;
-    }
-
-    return digits;
-  };
   return (
     <div className="container-box">
       <div className="container-company">
@@ -185,9 +162,10 @@ const EditComp = () => {
                   mask="00. 000. 000/0001-00"
                   name="cnpj"
                   id="cnpj"
-                  defaultValue="33.143.114/0001-40"
+                  defaultValue="60.701.190/0001-04"
                   placeholder="CNPJ"
                   onKeyUp={valCnpj}
+                  maxLength={18}
                   {...register("cnpj", { required: true })}
                 />
                 {errors?.cnpj && (
@@ -201,7 +179,7 @@ const EditComp = () => {
                 <input
                   className={errors?.atividadeEco && "input-error"}
                   mask="0000-0"
-                  defaultValue="00001-1"
+                  defaultValue="0001-1"
                   onKeyUp={handleCnae}
                   placeholder="CNAE"
                   {...register("atividadeEco", { required: true })}
