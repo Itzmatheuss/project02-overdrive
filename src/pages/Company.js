@@ -52,7 +52,7 @@ const Company = () => {
     },
     {
       header: "Nome",
-      accessorKey: "name",
+      accessorKey: "nome",
       size: 100,
     },
     {
@@ -63,18 +63,18 @@ const Company = () => {
 
     {
       header: "Endereço",
-      accessorKey: "address",
+      accessorKey: "endereço",
       size: 80,
     },
 
     {
       header: "Telefone",
-      accessorKey: "phone",
+      accessorKey: "telefone",
       size: 100,
     },
     {
       header: "Capital",
-      accessorKey: "money",
+      accessorKey: "capital",
       size: 100,
     },
     {
@@ -116,79 +116,88 @@ const Company = () => {
   });
 
   return (
-    <div className="container ">
-      <div className="search">
-        <input
-          className="search-input"
-          type="text"
-          value={filtering}
-          onChange={(e) => setFiltering(e.target.value)}
-          placeholder="Busca"
-        />
-        <span>
-          <SearchIcon />
-        </span>
-      </div>
-      <div className="tabela table-responsive">
-        <div className="add">
-          <Link to="/signupcomp">
-            <button type="submit" className="btn-user">
-              Adicionar Empresa
-            </button>
-          </Link>
+    <div className="container_comp">
+      <div className="container ">
+        <div className="search">
+          <input
+            className="search-input"
+            type="text"
+            value={filtering}
+            onChange={(e) => setFiltering(e.target.value)}
+            placeholder="Busca"
+          />
+          <span>
+            <SearchIcon />
+          </span>
         </div>
-        <table className="table table-hover table-bordered">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td className="w-auto h-auto p-2" key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="btn-container">
-          <button
-            disabled={!table.getCanPreviousPage()}
-            onClick={() => table.setPageIndex(0)}
-          >
-            <FirstPage />
-          </button>
-          <button
-            disabled={!table.getCanNextPage()}
-            onClick={() => table.nextPage()}
-          >
-            <ArrowForward />
-          </button>
-          <button
-            disabled={!table.getCanPreviousPage()}
-            onClick={() => table.previousPage()}
-          >
-            <ArrowBack />
-          </button>
-          <button
-            disabled={!table.getCanNextPage()}
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          >
-            <LastPage />
-          </button>
+        <div className="tabela">
+          <div className="add">
+            <Link to="/signupcomp">
+              <button type="submit" className="btn-user">
+                Adicionar Empresa
+              </button>
+            </Link>
+          </div>
+          <table className="table table-hover table-bordered">
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th key={header.id}>
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      data-th={cell.column.id}
+                      className="w-auto h-auto p-2"
+                      key={cell.id}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="btn-container">
+            <button
+              disabled={!table.getCanPreviousPage()}
+              onClick={() => table.setPageIndex(0)}
+            >
+              <FirstPage />
+            </button>
+            <button
+              disabled={!table.getCanNextPage()}
+              onClick={() => table.nextPage()}
+            >
+              <ArrowForward />
+            </button>
+            <button
+              disabled={!table.getCanPreviousPage()}
+              onClick={() => table.previousPage()}
+            >
+              <ArrowBack />
+            </button>
+            <button
+              disabled={!table.getCanNextPage()}
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            >
+              <LastPage />
+            </button>
+          </div>
         </div>
       </div>
     </div>

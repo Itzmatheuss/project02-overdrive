@@ -1,12 +1,15 @@
 body {
   background-image: url(../assets/build.jpg);
 }
+.container_users,
+.container_comp {
+  height: 82vh;
+}
 .container {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
   font-family: Georgia, "Times New Roman", Times, serif;
   color: #000;
   padding: 20px;
@@ -112,4 +115,20 @@ input:focus-visible {
 }
 .btn-del:hover {
   background-color: #cc1616;
+}
+
+@media (max-width: 900px) {
+  .footer {
+    display: none;
+  }
+  thead {
+    display: none;
+  }
+  td {
+    display: block;
+  }
+  td::before {
+    content: attr(data-th) ": ";
+    font-weight: bold;
+  }
 }

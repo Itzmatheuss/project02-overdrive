@@ -1,194 +1,194 @@
 [
   {
     "id": 1,
-    "name": "Beret",
+    "nome": "Beret",
     "cpf": "341.275.211-49",
     "username": "bivantsov0",
     "status": "Ativo",
-    "company": "Overdrive"
+    "empresa": "Overdrive"
   },
   {
     "id": 2,
-    "name": "Arly",
+    "nome": "Arly",
     "cpf": "027.243.010-21",
     "username": "abelfitt1",
     "status": "Ativo",
-    "company": "MaçaInc"
+    "empresa": "MaçaInc"
   },
   {
     "id": 3,
-    "name": "Myrvyn",
+    "nome": "Myrvyn",
     "cpf": "907.623.290-33",
     "username": "maronstam2",
     "status": "Inativo",
-    "company": ""
+    "empresa": ""
   },
   {
     "id": 4,
-    "name": "Mickey",
+    "nome": "Mickey",
     "cpf": "622.583.340-47",
     "username": "mmerrin3",
     "status": "Ativo",
-    "company": "Borracharia"
+    "empresa": "Borracharia"
   },
   {
     "id": 5,
-    "name": "Terrie",
+    "nome": "Terrie",
     "cpf": "099.418.640-12",
     "username": "tphilo4",
     "status": "Ativo",
-    "company": "Café Pelé"
+    "empresa": "Café Pelé"
   },
   {
     "id": 6,
-    "name": "Xena",
+    "nome": "Xena",
     "cpf": "003.042.000-85",
     "username": "xcorre5",
     "status": "Inativo",
-    "company": ""
+    "empresa": ""
   },
   {
     "id": 7,
-    "name": "Derron",
+    "nome": "Derron",
     "cpf": "393.061.070-13",
     "username": "dphibb6",
     "status": "Pendente",
-    "company": ""
+    "empresa": ""
   },
   {
     "id": 8,
-    "name": "Beret",
+    "nome": "Beret",
     "cpf": "754.650.480-50",
     "username": "bshucksmith7",
     "status": "Ativo",
-    "company": "MaçaInc"
+    "empresa": "MaçaInc"
   },
   {
     "id": 9,
-    "name": "Loree",
+    "nome": "Loree",
     "cpf": "874.058.890-42",
     "username": "lstreight8",
     "status": "Ativo",
-    "company": "Nvideo"
+    "empresa": "Nvideo"
   },
   {
     "id": 10,
-    "name": "Drucie",
+    "nome": "Drucie",
     "cpf": "564.471.090-44",
     "username": "dtosh9",
     "status": "Ativo",
-    "company": "Nvideo"
+    "empresa": "Nvideo"
   },
   {
     "id": 11,
-    "name": "Sosanna",
+    "nome": "Sosanna",
     "cpf": "381.168.500-75",
     "username": "slattina",
     "status": "Ativo",
-    "company": "Nvideo"
+    "empresa": "Nvideo"
   },
   {
     "id": 12,
-    "name": "Harmon",
+    "nome": "Harmon",
     "cpf": "497.904.260-03",
     "username": "hhuzzayb",
     "status": "Pendente",
-    "company": ""
+    "empresa": ""
   },
   {
     "id": 13,
-    "name": "Sheela",
+    "nome": "Sheela",
     "cpf": "478.447.030-16",
     "username": "sbriamoc",
     "status": "Ativo",
-    "company": "Café Pelé"
+    "empresa": "Café Pelé"
   },
   {
     "id": 14,
-    "name": "Debora",
+    "nome": "Debora",
     "cpf": "602.362.450-23",
     "username": "donoland",
     "status": "Ativo",
-    "company": "Nvideo"
+    "empresa": "Nvideo"
   },
   {
     "id": 15,
-    "name": "Catherina",
+    "nome": "Catherina",
     "cpf": "452.384.250-74",
     "username": "cfaircloughe",
     "status": "Ativo",
-    "company": "Nvideo"
+    "empresa": "Nvideo"
   },
   {
     "id": 16,
-    "name": "Perceval",
+    "nome": "Perceval",
     "cpf": "719.987.390-58",
     "username": "ptaplowf",
     "status": "Pendente",
-    "company": ""
+    "empresa": ""
   },
   {
     "id": 17,
-    "name": "Pollyanna",
+    "nome": "Pollyanna",
     "cpf": "260.680.460-01",
     "username": "pdoohang",
     "status": "Ativo",
-    "company": "Café Pelé"
+    "empresa": "Café Pelé"
   },
   {
     "id": 18,
-    "name": "Trudy",
+    "nome": "Trudy",
     "cpf": "335.256.520-11",
     "username": "thebbardh",
     "status": "Ativo",
-    "company": "Nvideo"
+    "empresa": "Nvideo"
   },
   {
     "id": 19,
-    "name": "Truman",
+    "nome": "Truman",
     "cpf": "088.508.040-83",
     "username": "trentolli",
     "status": "Pendente",
-    "company": ""
+    "empresa": ""
   },
   {
     "id": 20,
-    "name": "Jackqueline",
+    "nome": "Jackqueline",
     "cpf": "310.136.330-67",
     "username": "jmollisonj",
     "status": "Ativo",
-    "company": "Borracharia"
+    "empresa": "Borracharia"
   },
   {
     "id": 21,
-    "name": "Ryann",
+    "nome": "Ryann",
     "cpf": "013.613.950-79",
     "username": "rpartkyak",
     "status": "Ativo",
-    "company": "Borracharia"
+    "empresa": "Borracharia"
   },
   {
     "id": 22,
-    "name": "Alexia",
+    "nome": "Alexia",
     "cpf": "686.118.640-69",
     "username": "agosalvezl",
     "status": "Ativo",
-    "company": "Nvideo"
+    "empresa": "Nvideo"
   },
   {
     "id": 23,
-    "name": "Riccardo",
+    "nome": "Riccardo",
     "cpf": "250.123.100-71",
     "username": "rantonowiczm",
     "status": "Pendente",
-    "company": ""
+    "empresa": ""
   },
   {
     "id": 24,
-    "name": "Gallagher",
+    "nome": "Gallagher",
     "cpf": "849.684.990-27",
     "username": "ghosburnn",
     "status": "Pendente",
-    "company": ""
+    "empresa": ""
   }
 ]
