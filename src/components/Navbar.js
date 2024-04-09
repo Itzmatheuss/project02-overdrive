@@ -17,7 +17,7 @@ const Navbar = () => {
           </Link>
         </a>
         <button
-          class="navbar-toggler"
+          class="navbar-toggler bt-open"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#navbarNavAltMarkup"
@@ -31,8 +31,7 @@ const Navbar = () => {
           <div class="offcanvas-header">
             <button
               type="button"
-              class="btn-close"
-              style={{ color: "#fff;" }}
+              class="btn-close bt"
               data-bs-dismiss="offcanvas"
               aria-label="Close"
             ></button>

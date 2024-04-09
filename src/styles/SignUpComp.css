@@ -1,8 +1,8 @@
 .container-box {
   display: flex;
   align-items: center;
+
   justify-content: center;
-  height: 100%;
   font-family: Georgia, "Times New Roman", Times, serif;
   background-image: url(../assets/build.jpg);
   background-position: center;
@@ -11,6 +11,7 @@
 }
 .container-company {
   display: flex;
+
   align-items: center;
   justify-content: center;
 }
@@ -23,6 +24,7 @@
   border-radius: 10px;
   padding: 25px 30px;
   gap: 0 20px;
+  margin-bottom: 100px;
 }
 .container-formc {
   display: flex;
