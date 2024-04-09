@@ -9,59 +9,48 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const [openLinks, setOpenLinks] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 600) {
-        setOpenLinks(false); // Fecha o menu quando a largura da tela for maior ou igual a 600px
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const openNavbar = () => {
-    setOpenLinks(!openLinks);
-  };
-
   return (
-    <div className="navbar">
-      <div className="leftSide" id={openLinks ? "open" : "close"}>
-        <Link to="/">
-          <img src={Logo} alt="Logo" />
-        </Link>
-        <div className="hiddenLinks">
+    <nav class="navbar navbar-expand-lg nav-custom">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
           <Link to="/">
-            <HomeIcon />
+            <img src={Logo} alt="Logo" />
           </Link>
-          <Link to="/company">
-            <BusinessIcon />
-          </Link>
-          <Link to="/users">
-            <PeopleAltIcon />
-          </Link>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-end" id="navbarNavAltMarkup">
+          <div class="offcanvas-header">
+            <button
+              type="button"
+              class="btn-close"
+              style={{ bgcolor: "#fff" }}
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="navbar-nav">
+            <Link to="/company">
+              <h5>Empresas</h5>
+            </Link>
+
+            <Link to="/users">
+              <h5>Usúarios</h5>
+            </Link>
+          </div>
         </div>
       </div>
-      <div className="rightSide">
-        <Link to="/">
-          <HomeIcon />
-        </Link>
-        <Link to="/company">
-          <BusinessIcon />
-        </Link>
-        <Link to="/users">
-          <PeopleAltIcon />
-        </Link>
-        <button onClick={openNavbar}>
-          <ReorderIcon />
-        </button>
-      </div>
-    </div>
+    </nav>
   );
 };
 

@@ -1,131 +1,28 @@
-.navbar {
+.nav-custom {
   width: 100%;
-  height: 80px;
+  height: 90px;
   background-color: #121619;
   display: flex;
-  flex-direction: row;
 }
-
-.navbar .leftSide {
-  flex: 50%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding-left: 150px;
-}
-
-.navbar .leftSide img {
-  width: 100px;
-}
-
-.navbar .rightSide {
-  flex: 50%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 4em;
+#navbarNavAltMarkup {
+  background-color: #121619;
+  color: #fff;
 }
 
 .navbar a {
-  color: white;
+  color: rgb(255, 255, 255);
   text-decoration: none;
   margin: 20px;
 }
 
-.navbar .rightSide button {
-  background-color: transparent;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
-
-.navbar .rightSide svg {
+.navbar svg {
   font-size: 40px;
 }
 
-.navbar #open {
-  padding-left: 0px;
-}
-.navbar #open img {
-  display: none;
+.navbar img {
+  width: 100px;
 }
 
-.navbar #close img {
-  display: inherit;
-}
-
-.navbar #open .hiddenLinks {
-  display: inherit;
-  margin-left: 30px;
-}
-
-.navbar #close .hiddenLinks {
-  display: none;
-}
-
-.navbar #open a {
-  width: 70px;
-  margin: 5px;
-}
-@media only screen and (max-width: 900px) {
-  .navbar .rightSide a {
-    width: 70px;
-  }
-  .navbar .leftSide {
-    padding-left: 50px;
-  }
-}
-
-@media only screen and (max-width: 800px) {
-  .navbar .rightSide a {
-    display: none;
-  }
-
-  .navbar .rightSide {
-    justify-content: flex-end;
-    padding-right: 50px;
-  }
-
-  .navbar .rightSide button {
-    display: inherit;
-  }
-}
-
-@media only screen and (min-width: 800px) {
-  .navbar .rightSide button {
-    display: none;
-  }
-
-  .hiddenLinks {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 800px) {
-  .navbar #open {
-    /* Define estilos para o estado fechado do navbar #open */
-    padding-left: 0px;
-  }
-  .navbar .leftSide svg {
-    font-size: 30px;
-  }
-  .navbar #open img {
-    display: none;
-  }
-  .navbar #close img {
-    display: inherit;
-  }
-  .navbar #open .hiddenLinks {
-    display: inherit;
-    margin-left: 30px;
-  }
-  .navbar #close .hiddenLinks {
-    display: none;
-  }
-  .navbar #open a {
-    font-size: 40px;
-    width: 70px;
-    margin: 5px;
-  }
+.nav-custom .navbar-brand {
+  margin-right: auto;
 }
