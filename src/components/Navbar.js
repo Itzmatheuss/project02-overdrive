@@ -6,7 +6,6 @@ import BusinessIcon from "@mui/icons-material/Business";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 const Navbar = () => {
   return (
@@ -33,7 +32,7 @@ const Navbar = () => {
             <button
               type="button"
               class="btn-close"
-              style={{ bgcolor: "#fff" }}
+              style={{ color: "#fff;" }}
               data-bs-dismiss="offcanvas"
               aria-label="Close"
             ></button>

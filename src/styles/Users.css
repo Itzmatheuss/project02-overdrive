@@ -7,12 +7,14 @@ body {
 }
 .container {
   width: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: Georgia, "Times New Roman", Times, serif;
   color: #000;
   padding: 20px;
+  margin-bottom: 100px;
 }
 
 .search {
@@ -43,7 +45,6 @@ input:focus-visible {
 }
 .tabela {
   width: 80%;
-  height: 100%;
   text-align: center;
   margin: auto;
 }
@@ -117,19 +118,18 @@ input:focus-visible {
   background-color: #cc1616;
 }
 
-@media (max-width: 900px) {
-  .footer {
-    display: none;
-  }
-  thead {
-    display: none;
-  }
-  td {
-    display: block;
-  }
-  td::before {
-    content: attr(data-th) ": ";
-    font-weight: bold;
-    text-transform: capitalize;
+@media (max-width: 800px) {
+  .container_users {
+    thead {
+      display: none;
+    }
+    td {
+      display: block;
+    }
+    td::before {
+      content: attr(data-th) ": ";
+      font-weight: bold;
+      text-transform: capitalize;
+    }
   }
 }

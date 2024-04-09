@@ -11,6 +11,7 @@ import mData from "../MOCK_DATA_COMPANY.json";
 
 const EditUser = () => {
   const [empresas, setEmpresas] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -146,7 +147,7 @@ const EditUser = () => {
               <select {...register("empresaId")}>
                 {empresas.map((empresa) => (
                   <option key={empresa.id} value={empresa.id}>
-                    {empresa.name}
+                    {empresa.nome}
                   </option>
                 ))}
               </select>

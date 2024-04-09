@@ -1,0 +1,15 @@
+@media (max-width: 1000px) {
+  .container_comp {
+    thead {
+      display: none;
+    }
+    td {
+      display: block;
+    }
+    td::before {
+      content: attr(data-th) ": ";
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+  }
+}
