@@ -130,5 +130,6 @@ input:focus-visible {
   td::before {
     content: attr(data-th) ": ";
     font-weight: bold;
+    text-transform: capitalize;
   }
 }
