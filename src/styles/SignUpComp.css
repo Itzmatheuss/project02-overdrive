@@ -1,7 +1,6 @@
-.container-box {
+.container-caixa {
   display: flex;
   align-items: center;
-
   justify-content: center;
   font-family: Georgia, "Times New Roman", Times, serif;
   background-image: url(../assets/build.jpg);
@@ -11,7 +10,6 @@
 }
 .container-company {
   display: flex;
-
   align-items: center;
   justify-content: center;
 }
@@ -30,6 +28,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  margin-top: 20px;
 }
 
 .container-company form h2 {
@@ -51,10 +51,10 @@
   font-size: 0.7em;
 }
 
-.container-formc .input-box-date {
+.container-formc .input-caixa-date {
   width: 230px;
 }
-.container-formc .input-box-select {
+.container-formc .input-caixa-select {
   width: 230px;
 }
 .container-formc select {
@@ -82,13 +82,13 @@ select {
 .container-company form select {
   color: #000;
 }
-.container-company .checkbox {
+.container-company .checkcaixa {
   display: flex;
   color: #fff;
   font-size: 15px;
   gap: 5px;
 }
-.container-company .checkbox label {
+.container-company .checkcaixa label {
   margin-top: 2px;
 }
 .container-company .formc button {
@@ -150,4 +150,28 @@ select {
 .container-company form input:disabled {
   background-color: #fff;
   cursor: not-allowed;
+}
+
+.submit-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  margin-top: -10px;
+}
+
+.btCadastro {
+  width: 130px;
+  background-color: #1488d6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+form .btCadastro:hover {
+  background-color: #0794f3;
 }

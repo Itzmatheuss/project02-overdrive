@@ -103,7 +103,7 @@ const EditComp = () => {
   };
 
   return (
-    <div className="container-box">
+    <div className="container-caixa">
       <div className="container-company">
         <form className="formc" onSubmit={handleSubmit(handleFormSubmit)}>
           <div className="container-formc">
@@ -119,7 +119,9 @@ const EditComp = () => {
                   {...register("companyname", { required: true })}
                 />
                 {errors?.companyname && (
-                  <p className="error-message">{errors?.companyname.message}</p>
+                  <p className="error-messagec">
+                    {errors?.companyname.message}
+                  </p>
                 )}
               </label>
             </div>
@@ -134,7 +136,9 @@ const EditComp = () => {
                   {...register("fantasyname", { required: true })}
                 />
                 {errors?.fantasyname && (
-                  <p className="error-message">{errors?.fantasyname.message}</p>
+                  <p className="error-messagec">
+                    {errors?.fantasyname.message}
+                  </p>
                 )}
               </label>
             </div>
@@ -148,7 +152,7 @@ const EditComp = () => {
                   {...register("dataAbertura", { required: true })}
                 />
                 {errors?.dataAbertura && (
-                  <p className="error-message">
+                  <p className="error-messagec">
                     {errors?.dataAbertura.message}
                   </p>
                 )}
@@ -169,7 +173,7 @@ const EditComp = () => {
                   {...register("cnpj", { required: true })}
                 />
                 {errors?.cnpj && (
-                  <p className="error-message">{errors?.cnpj.message}</p>
+                  <p className="error-messagec">{errors?.cnpj.message}</p>
                 )}
               </label>
             </div>
@@ -185,7 +189,7 @@ const EditComp = () => {
                   {...register("atividadeEco", { required: true })}
                 />
                 {errors?.atividadeEco && (
-                  <p className="error-message">
+                  <p className="error-messagec">
                     {errors?.atividadeEco.message}
                   </p>
                 )}
@@ -202,7 +206,7 @@ const EditComp = () => {
                   {...register("nj", { required: true })}
                 />
                 {errors?.nj && (
-                  <p className="error-message">{errors?.nj.message}</p>
+                  <p className="error-messagec">{errors?.nj.message}</p>
                 )}
               </label>
             </div>
@@ -219,7 +223,7 @@ const EditComp = () => {
                   {...register("cep", { required: true })}
                 />
                 {errors?.cep && (
-                  <p className="error-message">{errors?.cep.message}</p>
+                  <p className="error-messagec">{errors?.cep.message}</p>
                 )}
               </label>
             </div>
@@ -235,7 +239,7 @@ const EditComp = () => {
                   {...register("city", { required: true })}
                 />
                 {errors?.city && (
-                  <p className="error-message">{errors?.city.message}</p>
+                  <p className="error-messagec">{errors?.city.message}</p>
                 )}
               </label>
             </div>
@@ -251,7 +255,7 @@ const EditComp = () => {
                   {...register("address", { required: true })}
                 />
                 {errors?.address && (
-                  <p className="error-message">{errors?.address.message}</p>
+                  <p className="error-messagec">{errors?.address.message}</p>
                 )}
               </label>
             </div>
@@ -267,7 +271,7 @@ const EditComp = () => {
                   {...register("neighborhood", { required: true })}
                 />
                 {errors?.neighborhood && (
-                  <p className="error-message">
+                  <p className="error-messagec">
                     {errors?.neighborhood.message}
                   </p>
                 )}
@@ -284,7 +288,7 @@ const EditComp = () => {
                   {...register("addressNumber", { required: true })}
                 />
                 {errors?.addressNumber && (
-                  <p className="error-message">
+                  <p className="error-messagec">
                     {errors?.addressNumber.message}
                   </p>
                 )}
@@ -335,7 +339,7 @@ const EditComp = () => {
                 </select>
 
                 {errors?.uf && (
-                  <p className="error-message">{errors?.uf.message}</p>
+                  <p className="error-messagec">{errors?.uf.message}</p>
                 )}
               </label>
             </div>
@@ -356,7 +360,7 @@ const EditComp = () => {
                   {...register("phone", { required: true })}
                 />
                 {errors?.phone && (
-                  <p className="error-message">{errors?.phone.message}</p>
+                  <p className="error-messagec">{errors?.phone.message}</p>
                 )}
               </label>
             </div>
@@ -372,7 +376,7 @@ const EditComp = () => {
                   {...register("capital", { required: true })}
                 />
                 {errors?.capital && (
-                  <p className="error-message">{errors?.capital.message}</p>
+                  <p className="error-messagec">{errors?.capital.message}</p>
                 )}
               </label>
             </div>

@@ -1,21 +1,3 @@
-.offcanvas {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0; /* Mantém o menu offcanvas à direita */
-  z-index: 1050;
-  visibility: hidden;
-  pointer-events: none;
-  background-color: #fff;
-  width: 250px; /* Ajuste a largura conforme necessário */
-  overflow-y: auto;
-}
-
-.offcanvas.show {
-  visibility: visible;
-  pointer-events: auto;
-}
-
 .nav-custom {
   width: 100%;
   height: 90px;
@@ -29,7 +11,7 @@
 }
 
 .container-fluid {
-  height: 90px;
+  height: 100px;
 }
 
 .navbar-expand-lg {
@@ -56,7 +38,7 @@
 
 @media (max-width: 991px) {
   .container-fluid {
-    margin-top: -56px;
+    margin-top: -45px;
   }
   .bt {
     background-color: #fff;

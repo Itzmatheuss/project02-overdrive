@@ -104,12 +104,12 @@ const SignUpComp = () => {
   };
 
   return (
-    <div className="container-box">
+    <div className="container-caixa">
       <div className="container-company">
         <form className="formc" onSubmit={handleSubmit(handleFormSubmit)}>
           <div className="container-formc">
             <h2>Dados da Empresa</h2>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Nome:</span>
                 <input
@@ -125,7 +125,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Nome Fantasia</span>
                 <input
@@ -141,7 +141,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box-date">
+            <div className="input-caixa-date">
               <label>
                 <span>Data de abertura:</span>
                 <input
@@ -156,7 +156,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>CNPJ:</span>
                 <input
@@ -173,7 +173,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Atividade Econômica (CNAE):</span>
                 <input
@@ -190,7 +190,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Natureza Jurídica:</span>
                 <input
@@ -204,7 +204,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Digite seu CEP:</span>
                 <input
@@ -220,7 +220,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Cidade:</span>
                 <input
@@ -235,7 +235,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Rua:</span>
                 <input
@@ -250,7 +250,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Bairro:</span>
                 <input
@@ -267,7 +267,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Número:</span>
                 <input
@@ -284,7 +284,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box-select">
+            <div className="input-caixa-select">
               <label>
                 <span>Estado:</span>
                 <select
@@ -332,13 +332,13 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Complemento (Opcional):</span>
                 <input type="text" placeholder="Complemento" />
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Telefone:</span>
                 <input
@@ -353,7 +353,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box">
+            <div className="input-caixa">
               <label>
                 <span>Capital:</span>
                 <input
@@ -368,7 +368,7 @@ const SignUpComp = () => {
                 )}
               </label>
             </div>
-            <div className="input-box-select">
+            <div className="input-caixa-select">
               <label>
                 <span>Status:</span>
                 <select {...register("status")}>
