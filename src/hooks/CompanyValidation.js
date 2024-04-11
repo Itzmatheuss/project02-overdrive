@@ -43,7 +43,6 @@ export const companyValidationSchema = Yup.object().shape({
     .required("Campo obrigatório.")
     .length(6, "Deve conter 5 digitos")
     .test("validar-cnae", "CNAE inválido", (value) => {
-      console.log(value);
       if (!value) return false;
       if (value.match(/\d{4}-\d$/)) {
         return true;
