@@ -32,5 +32,4 @@ export const userValidationSchema = Yup.object().shape({
     })
     .min(11, "O telefone deve ter 11 dígitos")
     .required("Campo obrigatório."),
-  privacyTerms: Yup.bool().oneOf([true], "É necessário aceitar os termos."),
 });

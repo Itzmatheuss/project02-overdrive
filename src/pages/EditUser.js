@@ -153,20 +153,6 @@ const EditUser = () => {
               </select>
             </label>
           )}
-          <div className="checkbox">
-            <input
-              type="checkbox"
-              name="privacy-policy"
-              {...register("privacyTerms")}
-              className={errors?.privacy && "input-error"}
-            />
-            <label>Concordo com os termos de privacidade.</label>
-            {errors?.privacyTerms && (
-              <p className="error-message-privacy">
-                {errors.privacyTerms.message}
-              </p>
-            )}
-          </div>
         </div>
         <div className="submit-input">
           <button className="btnUser">Alterar</button>
