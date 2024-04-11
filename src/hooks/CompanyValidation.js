@@ -31,7 +31,6 @@ export const companyValidationSchema = Yup.object().shape({
     .required("Campo obrigatório.")
     .min(14, "O CNPJ deve ter 14 dígitos")
     .test("validar-cnpj", "CNPJ inválido", function (value) {
-      if (!value) return false; // Retorna falso se o valor não estiver definido
       const cnpj = value.replace(/\D/g, ""); // Remove caracteres não numéricos
       if (cnpj.length !== 14 || !/^\d{14}$/.test(cnpj)) {
         console.log(cnpj);
@@ -44,6 +43,7 @@ export const companyValidationSchema = Yup.object().shape({
     .required("Campo obrigatório.")
     .length(6, "Deve conter 5 digitos")
     .test("validar-cnae", "CNAE inválido", (value) => {
+      console.log(value);
       if (!value) return false;
       if (value.match(/\d{4}-\d$/)) {
         return true;
