@@ -1,5 +1,8 @@
+/* eslint-disable */
+
 const ValidarCnpj = (cnpj) => {
   cnpj = cnpj.replace(/[^\d]+/g, "");
+  console.log(typeof cnpj);
 
   if (cnpj.length != 14) return false;
 
