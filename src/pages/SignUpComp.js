@@ -165,6 +165,7 @@ const SignUpComp = () => {
                   name="cnpj"
                   id="cnpj"
                   placeholder="CNPJ"
+                  maxLength={18}
                   onKeyUp={valCnpj}
                   {...register("cnpj", { required: true })}
                 />
