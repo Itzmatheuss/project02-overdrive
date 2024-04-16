@@ -29,6 +29,7 @@ const Company = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
       confirmButtonText: "Sim, Deletar!",
     }).then((result) => {
       if (result.isConfirmed) {
