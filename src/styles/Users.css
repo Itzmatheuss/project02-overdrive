@@ -123,8 +123,12 @@ input:focus-visible {
     thead {
       display: none;
     }
+
     td {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
     }
     td::before {
       content: attr(data-th) ": ";
