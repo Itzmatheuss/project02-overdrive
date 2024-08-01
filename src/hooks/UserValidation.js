@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import validarCpf from "./ValCpf";
 
 export const userValidationSchema = Yup.object().shape({
-  name: Yup.string()
+  nome: Yup.string()
     .min(3, "Mínimo de 3 caracteres")
     .required("Campo obrigatório."),
   username: Yup.string()

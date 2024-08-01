@@ -1,53 +1,103 @@
 import "../styles/SignUpUser.css";
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useMemo } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { userValidationSchema } from "../hooks/UserValidation";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-
-import mData from "../MOCK_DATA_COMPANY.json";
+import UsuarioService from "../service/UsuarioService";
+import EmpresaService from "../service/EmpresaService";
 
 const EditUser = () => {
   const [empresas, setEmpresas] = useState([]);
-
+  const [user, setUser] = useState(null);
+  const { id } = useParams();
+  const usuarioService = useMemo(() => new UsuarioService(), []);
+  const companyService = useMemo(() => new EmpresaService(), []);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setEmpresas(mData);
-  }, []);
 
   const {
     register,
     watch,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({ resolver: yupResolver(userValidationSchema) });
 
-  console.log({ errors });
+  const status = watch("status");
+
+  useEffect(() => {
+    // Carrega a lista de empresas
+    companyService.listarTodos().then((response) => {
+      setEmpresas(response.data);
+    });
+
+    // Carrega o usuário se o ID estiver presente
+    if (id) {
+      usuarioService
+        .listarPorId(id)
+        .then((response) => {
+          const userData = response.data;
+          setUser(userData);
+
+          // Atualiza os valores do formulário
+          setValue("nome", userData.nome);
+          setValue("username", userData.userName);
+          setValue("cpf", cpfMask(userData.cpf));
+          setValue("telefone", phoneMask(userData.telefone));
+          setValue("status", userData.status);
+
+          if (userData.status === 2) {
+            setValue("empresaId", userData.empresaId || "");
+          } else {
+            setValue("empresaId", "");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar usuário:", error);
+        });
+    }
+  }, [companyService, id, usuarioService]);
 
   const onSubmit = (data) => {
     console.log(data);
-    navigate("/users");
+    data.cpf = data.cpf.replace(/\D/g, "");
+    data.status = parseInt(data.status);
+    data.id = id;
+    if (data.empresaId === "") {
+      data.empresaId = null;
+    }
+
+    usuarioService
+      .atualizar(data)
+      .then(() => {
+        Swal.fire({
+          title: "Usuário alterado com sucesso!",
+          text: "",
+          icon: "success",
+        });
+        navigate("/users");
+      })
+      .catch((error) => {
+        console.error("Erro ao atualizar usuário:", error);
+        Swal.fire({
+          title: "Erro!",
+          text: "Não foi possível alterar o usuário.",
+          icon: "error",
+        });
+      });
   };
 
   const handleCpf = (e) => {
     let cpf = e.target.value;
     cpf = cpf.replace(/\D/g, "");
-    e.target.value = cpf;
-
-    let input = e.target;
-    input.value = cpfMask(input.value);
+    e.target.value = cpfMask(cpf);
   };
 
   const handlePhone = (e) => {
     let phone = e.target.value;
     phone = phone.replace(/\D/g, "");
-    e.target.value = phone;
-
-    let input = e.target;
-    input.value = phoneMask(input.value);
+    e.target.value = phoneMask(phone);
   };
 
   const phoneMask = (value) => {
@@ -64,19 +114,9 @@ const EditUser = () => {
     return cpf;
   };
 
-  const handleFormSubmit = (formData) => {
-    onSubmit(formData);
-    Swal.fire({
-      title: "Usúario alterado com sucesso!",
-      text: "",
-      icon: "success",
-    });
-    navigate("/users");
-  };
-
   return (
     <div className="container-user">
-      <form className="form" onSubmit={handleSubmit(handleFormSubmit)}>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <h2>Alterar seus dados</h2>
         <div className="container-form">
           <label>
@@ -85,20 +125,18 @@ const EditUser = () => {
               className={errors?.name && "input-error"}
               type="text"
               placeholder="Nome"
-              defaultValue="Matheusinho Santos"
-              {...register("name")}
+              {...register("nome")}
             />
-            {errors?.name && (
-              <p className="error-message">{errors?.name.message}</p>
+            {errors?.nome && (
+              <p className="error-message">{errors?.nome.message}</p>
             )}
           </label>
           <label>
-            <span>Nome de Usúario:</span>
+            <span>Nome de Usuário:</span>
             <input
               className={errors?.username && "input-error"}
               type="text"
-              defaultValue="Itzmatheuss"
-              placeholder="Nome de usúario"
+              placeholder="Nome de Usuário"
               {...register("username")}
             />
             {errors?.username && (
@@ -111,7 +149,6 @@ const EditUser = () => {
               className={errors?.cpf && "input-error"}
               placeholder="999.999.999-99"
               maxLength={14}
-              defaultValue="476.410.278-14"
               onKeyUp={handleCpf}
               {...register("cpf")}
             />
@@ -125,7 +162,6 @@ const EditUser = () => {
               className={errors?.telefone && "input-error"}
               placeholder="(99)99999-9999"
               onKeyUp={handlePhone}
-              defaultValue="(19)99437-7841"
               maxLength={15}
               {...register("telefone")}
             />
@@ -136,15 +172,18 @@ const EditUser = () => {
           <label>
             <span>Status:</span>
             <select {...register("status")}>
-              <option value="1">Inativo</option>
-              <option value="2">Pendente</option>
-              <option value="3">Ativo</option>
+              <option value="0">Inativo</option>
+              <option value="1">Pendente</option>
+              <option value="2">Ativo</option>
             </select>
           </label>
-          {watch("status") === "3" && (
+          {status == "2" && (
             <label>
-              <span>Empresas:</span>
+              <span>Empresa:</span>
               <select {...register("empresaId")}>
+                <option disabled value="">
+                  Selecione uma empresa
+                </option>
                 {empresas.map((empresa) => (
                   <option key={empresa.id} value={empresa.id}>
                     {empresa.nome}
@@ -155,9 +194,11 @@ const EditUser = () => {
           )}
         </div>
         <div className="submit-input">
-          <button className="btnUser">Alterar</button>
+          <button type="submit" className="btnUser">
+            Alterar
+          </button>
           <Link to="/users">
-            <button type="submit" className="btnUser">
+            <button type="button" className="btnUser">
               Voltar
             </button>
           </Link>

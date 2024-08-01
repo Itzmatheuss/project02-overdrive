@@ -2,15 +2,15 @@ import * as Yup from "yup";
 import ValidarCnpj from "./ValCpnj";
 
 export const companyValidationSchema = Yup.object().shape({
-  companyname: Yup.string()
+  nome: Yup.string()
     .required("Campo obrigatório.")
     .min(5, "Mínimo de 5 caracteres")
     .max(30, "Máximo de 30 caracteres"),
-  fantasyname: Yup.string()
+  nomeFantasia: Yup.string()
     .required("Campo obrigatório.")
     .min(5, "Mínimo de 5 caracteres")
     .max(40, "Máximo 40 caracteres"),
-  dataAbertura: Yup.date()
+  dataCadastro: Yup.date()
     .required("Data obrigatória")
     .nullable()
     .transform((value, originalValue) => {
@@ -40,7 +40,7 @@ export const companyValidationSchema = Yup.object().shape({
       console.log(ValidarCnpj(cnpj));
       return ValidarCnpj(cnpj); // Retorna o resultado da validação do CPF
     }),
-  atividadeEco: Yup.string()
+  cnae: Yup.string()
     .required("Campo obrigatório.")
     .length(6, "Deve conter 5 digitos")
     .test("validar-cnae", "CNAE inválido", (value) => {
@@ -58,8 +58,8 @@ export const companyValidationSchema = Yup.object().shape({
         return true;
       }
     }),
-  addressNumber: Yup.string().required("Campo obrigatório."),
-  phone: Yup.string()
+  numero: Yup.string().required("Campo obrigatório."),
+  telefone: Yup.string()
     .required("Campo obrigatório.")
     .min(11, "O telefone deve ter 11 dígitos")
     .test("validar-tel", "Número de telefone inválido", (value) => {
@@ -72,6 +72,6 @@ export const companyValidationSchema = Yup.object().shape({
       }
       return false;
     }),
-  nj: Yup.string().required("Campo obrigatória."),
+  naturezaJuridica: Yup.string().required("Campo obrigatória."),
   capital: Yup.string().required("Campo obrigatório."),
 });

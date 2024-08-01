@@ -1,4 +1,5 @@
 import "../styles/Company.css";
+import InputMask from "react-input-mask";
 //Icons
 import { Link } from "react-router-dom";
 import FirstPage from "@mui/icons-material/FirstPage";
@@ -6,10 +7,11 @@ import ArrowForward from "@mui/icons-material/NavigateNext";
 import ArrowBack from "@mui/icons-material/NavigateBefore";
 import LastPage from "@mui/icons-material/LastPage";
 import SearchIcon from "@mui/icons-material/Search";
-import mData from "../MOCK_DATA_COMPANY.json";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
+import EmpresaService from "../service/EmpresaService.js";
 
 import {
   useReactTable,
@@ -18,13 +20,29 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const Company = () => {
-  const handleDelete = () => {
+  const [companies, setCompanies] = useState([]);
+  const empresaService = useMemo(() => new EmpresaService(), []);
+
+  useEffect(() => {
+    empresaService
+      .listarTabela()
+      .then((response) => {
+        console.log(response.data);
+        setCompanies(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [empresaService]);
+
+  const handleDelete = (id) => {
+    console.log(id);
     Swal.fire({
       title: "Tem certeza que deseja deletar ?",
-      text: "Esta é uma ação irreversivel !",
+      text: "Esta é uma ação irreversível!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -33,78 +51,111 @@ const Company = () => {
       confirmButtonText: "Sim, Deletar!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deletado!",
-          text: "A empresa foi deletada com sucesso.",
-          icon: "success",
-        });
+        empresaService
+          .deletar(id)
+          .then(() => {
+            Swal.fire({
+              title: "Deletado!",
+              text: "A empresa foi deletada com sucesso.",
+              icon: "success",
+            });
+            setCompanies((prevCompanies) =>
+              prevCompanies.filter((company) => company.id !== id)
+            );
+          })
+          .catch((error) => {
+            console.error("Erro ao deletar empresa:", error);
+            Swal.fire({
+              title: "Erro!",
+              text: "Não foi possível deletar a empresa.",
+              icon: "error",
+            });
+          });
       }
     });
   };
 
-  const data = useMemo(() => mData, []);
+  const columns = useMemo(
+    () => [
+      {
+        header: "ID",
+        accessorKey: "id",
+        size: 40,
+      },
+      {
+        header: "Nome",
+        accessorKey: "nomeFantasia",
+      },
+      {
+        header: "CNPJ",
+        accessorKey: "cnpj",
+        cell: (info) => (
+          <InputMask
+            mask="99.999.999/9999-99"
+            value={info.getValue()}
+            readOnly
+            className="mask-input"
+          >
+            {(inputProps) => <input {...inputProps} />}
+          </InputMask>
+        ),
+      },
 
-  /** @type import('@tanstack/react-table').columnDef<any>*/
-  const columns = [
-    {
-      header: "ID",
-      accessorKey: "id",
-      size: 40,
-    },
-    {
-      header: "Nome",
-      accessorKey: "nome",
-      size: 100,
-    },
-    {
-      header: "CNPJ",
-      accessorKey: "cnpj",
-      size: 100,
-    },
+      {
+        header: "Endereço",
+        accessorKey: "cidade",
+      },
 
-    {
-      header: "Endereço",
-      accessorKey: "endereço",
-      size: 80,
-    },
-
-    {
-      header: "Telefone",
-      accessorKey: "telefone",
-      size: 100,
-    },
-    {
-      header: "Capital",
-      accessorKey: "capital",
-      size: 100,
-    },
-    {
-      header: "Status",
-      accessorKey: "status",
-      size: 80,
-    },
-    {
-      header: "Ações",
-      size: 90,
-      cell: (
-        <div className="action-buttons">
-          <Link to={`/company/editcompany/1`}>
-            <button type="button" className="btn-edit">
-              <EditIcon />
+      {
+        header: "Telefone",
+        accessorKey: "telefone",
+        cell: (info) => (
+          <InputMask
+            mask="(99) 99999-9999"
+            value={info.getValue()}
+            readOnly
+            className="mask-input"
+          >
+            {(inputProps) => <input {...inputProps} />}
+          </InputMask>
+        ),
+      },
+      {
+        header: "Capital",
+        accessorKey: "capital",
+      },
+      {
+        header: "Status",
+        accessorKey: "status",
+      },
+      {
+        header: "Ações",
+        size: 90,
+        cell: ({ row }) => (
+          <div className="action-buttons">
+            <Link to={`/company/editcompany/${row.original.id}`}>
+              <button type="button" className="btn-edit">
+                <EditIcon />
+              </button>
+            </Link>
+            <button
+              type="button"
+              className="btn-del"
+              onClick={() => handleDelete(row.original.id)}
+            >
+              <DeleteIcon />
             </button>
-          </Link>
-          <button type="button" className="btn-del" onClick={handleDelete}>
-            <DeleteIcon />
-          </button>
-        </div>
-      ),
-    },
-  ];
+          </div>
+        ),
+      },
+    ],
+    []
+  );
 
   const [filtering, setFiltering] = useState("");
 
   const table = useReactTable({
-    data,
+    data: companies,
     columns,
     getCoreRowModel: getCoreRowModel(),
     columnResizeMode: "onChange",

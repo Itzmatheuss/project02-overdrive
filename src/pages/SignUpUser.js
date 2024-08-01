@@ -1,13 +1,15 @@
 import "../styles/SignUpUser.css";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { userValidationSchema } from "../hooks/UserValidation";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import UsuarioService from "../service/UsuarioService";
+import { useMemo } from "react";
 
 const SignUpUser = () => {
   const navigate = useNavigate();
+  const usuarioService = useMemo(() => new UsuarioService(), []);
   const {
     register,
     handleSubmit,
@@ -18,24 +20,39 @@ const SignUpUser = () => {
 
   const onSubmit = (data) => {
     console.log(data);
+    data.cpf = data.cpf.replace(/\D/g, "");
+    data.empresaId = null; // Definindo empresaId como null diretamente
+    data.status = parseInt(data.status);
+    usuarioService
+      .salvar(data)
+      .then(() => {
+        Swal.fire({
+          title: "Usuário alterado com sucesso!",
+          text: "",
+          icon: "success",
+        });
+        navigate("/users");
+      })
+      .catch((error) => {
+        console.error("Erro ao atualizar usuário:", error);
+        Swal.fire({
+          title: "Erro!",
+          text: "Não foi possível cadastrar o usuário.",
+          icon: "error",
+        });
+      });
   };
 
   const handleCpf = (e) => {
     let cpf = e.target.value;
     cpf = cpf.replace(/\D/g, "");
-    e.target.value = cpf;
-
-    let input = e.target;
-    input.value = cpfMask(input.value);
+    e.target.value = cpfMask(cpf);
   };
 
   const handlePhone = (e) => {
     let phone = e.target.value;
     phone = phone.replace(/\D/g, "");
-    e.target.value = phone;
-
-    let input = e.target;
-    input.value = phoneMask(input.value);
+    e.target.value = phoneMask(phone);
   };
 
   const phoneMask = (value) => {
@@ -52,19 +69,9 @@ const SignUpUser = () => {
     return cpf;
   };
 
-  const handleFormSubmit = (formData) => {
-    onSubmit(formData);
-    Swal.fire({
-      title: "Cadastro efetuado com sucesso!",
-      text: "",
-      icon: "success",
-    });
-    navigate("/users");
-  };
-
   return (
     <div className="container-user">
-      <form className="form" onSubmit={handleSubmit(handleFormSubmit)}>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <h2>Insira seus dados</h2>
         <div className="container-form">
           <label>
@@ -73,18 +80,18 @@ const SignUpUser = () => {
               className={errors?.name && "input-error"}
               type="text"
               placeholder="Nome"
-              {...register("name")}
+              {...register("nome")}
             />
             {errors?.name && (
               <p className="error-message">{errors?.name.message}</p>
             )}
           </label>
           <label>
-            <span>Nome de Usúario:</span>
+            <span>Nome de Usuário:</span>
             <input
               className={errors?.username && "input-error"}
               type="text"
-              placeholder="Nome de Usúario"
+              placeholder="Nome de Usuário"
               {...register("username")}
             />
             {errors?.username && (
@@ -120,14 +127,14 @@ const SignUpUser = () => {
           <label>
             <span>Status:</span>
             <select {...register("status")}>
-              <option value="2">Pendente</option>
+              <option value="1">Pendente</option>
             </select>
           </label>
         </div>
         <div className="submit-input">
           <button className="btnUser">Cadastrar</button>
           <Link to="/">
-            <button type="submit" className="btnUser">
+            <button type="button" className="btnUser">
               Voltar
             </button>
           </Link>

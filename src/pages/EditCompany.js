@@ -1,12 +1,22 @@
 import "../styles/SignUpComp.css";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { companyValidationSchema } from "../hooks/CompanyValidation";
 import { useMask } from "../hooks/Masks";
+import { useEffect, useState, useMemo } from "react";
 import Swal from "sweetalert2";
 
+import EmpresaService from "../service/EmpresaService";
+
 const EditComp = () => {
+  const [empresas, setEmpresas] = useState([]);
+  const { id } = useParams();
+  const empresaService = useMemo(() => new EmpresaService(), []);
+
+  const navigate = useNavigate();
+  const { maskCnae, phoneMask, maskCep, maskCurrency, maskCnpj } = useMask();
+
   const {
     register,
     setValue,
@@ -15,8 +25,48 @@ const EditComp = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(companyValidationSchema) });
 
-  const navigate = useNavigate();
-  const { maskCnae, phoneMask, maskCep, maskCurrency, maskCnpj } = useMask();
+  useEffect(() => {
+    if (id) {
+      empresaService
+        .listarPorId(id)
+        .then((response) => {
+          const companyData = response.data;
+
+          console.log("Received company data:", companyData);
+
+          // Verificar se a data é válida
+          const dataCadastro = new Date(companyData.dataCadastro);
+          if (!isNaN(dataCadastro)) {
+            const formattedDate = dataCadastro.toISOString().split("T")[0];
+            setValue("dataCadastro", formattedDate);
+          } else {
+            console.error(
+              "Invalid date format received:",
+              companyData.dataCadastro
+            );
+          }
+
+          setValue("nome", companyData.nome);
+          setValue("nomeFantasia", companyData.nomeFantasia);
+          setValue("cnpj", maskCnpj(companyData.cnpj));
+          setValue("cnae", maskCnae(companyData.cnae));
+          setValue("naturezaJuridica", companyData.naturezaJuridica);
+          setValue("cep", maskCep(companyData.cep));
+          setValue("cidade", companyData.cidade);
+          setValue("rua", companyData.rua);
+          setValue("bairro", companyData.bairro);
+          setValue("numero", companyData.numero);
+          setValue("estado", companyData.estado);
+          setValue("complemento", companyData.complemento);
+          setValue("telefone", phoneMask(companyData.telefone));
+          setValue("capital", companyData.capital);
+          setValue("status", companyData.status);
+        })
+        .catch((error) => {
+          console.error("Error fetching company data:", error);
+        });
+    }
+  }, [empresaService, id, maskCnpj, maskCnae, maskCep, phoneMask]);
 
   const checkCEP = (e) => {
     let value = e.target.value;
@@ -31,25 +81,27 @@ const EditComp = () => {
         .then((data) => {
           console.log(data);
           if (data.erro) {
+            Swal.fire({ title: "CEP não encontrado!", icon: "error" });
             document.getElementById("cep").value = "";
             setFocus("cep");
-            setValue("address", data.logradouro);
-            setValue("neighborhood", data.bairro);
-            setValue("city", data.localidade);
-            setValue("uf", "NN");
+            setValue("rua", data.logradouro);
+            setValue("bairro", data.bairro);
+            setValue("cidade", data.localidade);
+            setValue("estado", "NN");
           } else {
-            // register({ name: 'address', value: data.logradouro });
-            setValue("address", data.logradouro);
-            setValue("neighborhood", data.bairro);
-            setValue("city", data.localidade);
-            setValue("uf", data.uf);
-            setFocus("addressNumber");
+            // register({ name: 'rua', value: data.logradouro });
+            setValue("rua", data.logradouro);
+            setValue("bairro", data.bairro);
+            setValue("cidade", data.localidade);
+            setValue("estado", data.uf);
+            setFocus("numero");
           }
         });
     }
     let input = e.target;
     input.value = maskCep(input.value);
   };
+
   // 60.701.190/0001-04
   const valCnpj = (e) => {
     let cnpj = e.target.value;
@@ -62,16 +114,28 @@ const EditComp = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-  };
-
-  const handleFormSubmit = (formData) => {
-    onSubmit(formData);
-    Swal.fire({
-      title: "Empresa alterada com sucesso!",
-      text: "",
-      icon: "success",
-    });
-    navigate("/company");
+    data.cnpj = data.cnpj.replace(/\D/g, "");
+    data.cep = data.cep.replace(/\D/g, "");
+    data.status = parseInt(data.status);
+    data.id = id;
+    empresaService
+      .atualizar(data)
+      .then(() => {
+        Swal.fire({
+          title: "Empresa cadastrada com sucesso!",
+          text: "",
+          icon: "success",
+        });
+        navigate("/company");
+      })
+      .catch((error) => {
+        console.error("Erro ao cadastrar empresa:", error);
+        Swal.fire({
+          title: "Erro!",
+          text: "Não foi possível cadastrar a empresa.",
+          icon: "error",
+        });
+      });
   };
 
   const handlePhone = (e) => {
@@ -105,23 +169,21 @@ const EditComp = () => {
   return (
     <div className="container-caixa">
       <div className="container-company">
-        <form className="formc" onSubmit={handleSubmit(handleFormSubmit)}>
+        <form className="formc" onSubmit={handleSubmit(onSubmit)}>
           <div className="container-formc">
             <h2>Dados da Empresa</h2>
             <div className="input-caixa">
               <label>
                 <span>Nome:</span>
                 <input
-                  className={errors?.companyname && "input-error"}
+                  className={errors?.nome && "input-error"}
                   type="text"
                   defaultValue="Overdrive Ltda"
                   placeholder="Nome"
-                  {...register("companyname", { required: true })}
+                  {...register("nome", { required: true })}
                 />
-                {errors?.companyname && (
-                  <p className="error-messagec">
-                    {errors?.companyname.message}
-                  </p>
+                {errors?.nome && (
+                  <p className="error-messagec">{errors?.nome.message}</p>
                 )}
               </label>
             </div>
@@ -129,15 +191,15 @@ const EditComp = () => {
               <label>
                 <span>Nome Fantasia</span>
                 <input
-                  className={errors?.fantasyname && "input-error"}
+                  className={errors?.nomeFantasia && "input-error"}
                   type="text"
                   defaultValue="OverDrive"
                   placeholder="Nome Fantasia"
-                  {...register("fantasyname", { required: true })}
+                  {...register("nomeFantasia", { required: true })}
                 />
-                {errors?.fantasyname && (
+                {errors?.nomeFantasia && (
                   <p className="error-messagec">
-                    {errors?.fantasyname.message}
+                    {errors?.nomeFantasia.message}
                   </p>
                 )}
               </label>
@@ -146,14 +208,14 @@ const EditComp = () => {
               <label>
                 <span>Data de abertura:</span>
                 <input
-                  className={errors?.dataAbertura && "input-error"}
+                  className={errors?.dataCadastro && "input-error"}
                   type="date"
                   value="2024-04-01"
-                  {...register("dataAbertura", { required: true })}
+                  {...register("dataCadastro", { required: true })}
                 />
-                {errors?.dataAbertura && (
+                {errors?.dataCadastro && (
                   <p className="error-messagec">
-                    {errors?.dataAbertura.message}
+                    {errors?.dataCadastro.message}
                   </p>
                 )}
               </label>
@@ -181,17 +243,15 @@ const EditComp = () => {
               <label>
                 <span>Atividade Econômica (CNAE):</span>
                 <input
-                  className={errors?.atividadeEco && "input-error"}
+                  className={errors?.cnae && "input-error"}
                   mask="0000-0"
                   defaultValue="0001-1"
                   onKeyUp={handleCnae}
                   placeholder="CNAE"
-                  {...register("atividadeEco", { required: true })}
+                  {...register("cnae", { required: true })}
                 />
-                {errors?.atividadeEco && (
-                  <p className="error-messagec">
-                    {errors?.atividadeEco.message}
-                  </p>
+                {errors?.cnae && (
+                  <p className="error-messagec">{errors?.cnae.message}</p>
                 )}
               </label>
             </div>
@@ -199,14 +259,16 @@ const EditComp = () => {
               <label>
                 <span>Natureza Jurídica:</span>
                 <input
-                  className={errors?.nj && "input-error"}
+                  className={errors?.naturezaJuridica && "input-error"}
                   type="text"
                   defaultValue="Desenvolvimento"
                   placeholder="Natureza Jurídica"
-                  {...register("nj", { required: true })}
+                  {...register("naturezaJuridica", { required: true })}
                 />
-                {errors?.nj && (
-                  <p className="error-messagec">{errors?.nj.message}</p>
+                {errors?.naturezaJuridica && (
+                  <p className="error-messagec">
+                    {errors?.naturezaJuridica.message}
+                  </p>
                 )}
               </label>
             </div>
@@ -215,6 +277,7 @@ const EditComp = () => {
                 <span>Digite seu CEP:</span>
                 <input
                   className={errors?.cep && "input-error"}
+                  id="cep"
                   mask="00000-000"
                   placeholder="CEP"
                   defaultValue="13836-068"
@@ -231,15 +294,15 @@ const EditComp = () => {
               <label>
                 <span>Cidade:</span>
                 <input
-                  className={errors?.city && "input-error"}
+                  className={errors?.cidade && "input-error"}
                   type="text"
                   disabled
                   defaultValue="Araras"
                   placeholder="Cidade"
-                  {...register("city", { required: true })}
+                  {...register("cidade", { required: true })}
                 />
-                {errors?.city && (
-                  <p className="error-messagec">{errors?.city.message}</p>
+                {errors?.cidade && (
+                  <p className="error-messagec">{errors?.cidade.message}</p>
                 )}
               </label>
             </div>
@@ -247,15 +310,15 @@ const EditComp = () => {
               <label>
                 <span>Rua:</span>
                 <input
-                  className={errors?.address && "input-error"}
+                  className={errors?.rua && "input-error"}
                   type="text"
                   disabled
                   defaultValue="Rodolpho Tognasca"
                   placeholder="Rua"
-                  {...register("address", { required: true })}
+                  {...register("rua", { required: true })}
                 />
-                {errors?.address && (
-                  <p className="error-messagec">{errors?.address.message}</p>
+                {errors?.rua && (
+                  <p className="error-messagec">{errors?.rua.message}</p>
                 )}
               </label>
             </div>
@@ -263,17 +326,15 @@ const EditComp = () => {
               <label>
                 <span>Bairro:</span>
                 <input
-                  className={errors?.neighborhood && "input-error"}
+                  className={errors?.bairro && "input-error"}
                   type="text"
                   disabled
                   defaultValue="Jardim da Colina"
                   placeholder="Bairro"
-                  {...register("neighborhood", { required: true })}
+                  {...register("bairro", { required: true })}
                 />
-                {errors?.neighborhood && (
-                  <p className="error-messagec">
-                    {errors?.neighborhood.message}
-                  </p>
+                {errors?.bairro && (
+                  <p className="error-messagec">{errors?.bairro.message}</p>
                 )}
               </label>
             </div>
@@ -281,16 +342,14 @@ const EditComp = () => {
               <label>
                 <span>Número:</span>
                 <input
-                  className={errors?.addressNumber && "input-error"}
+                  className={errors?.numero && "input-error"}
                   type="text"
                   defaultValue={211}
                   placeholder="Número"
-                  {...register("addressNumber", { required: true })}
+                  {...register("numero", { required: true })}
                 />
-                {errors?.addressNumber && (
-                  <p className="error-messagec">
-                    {errors?.addressNumber.message}
-                  </p>
+                {errors?.numero && (
+                  <p className="error-messagec">{errors?.numero.message}</p>
                 )}
               </label>
             </div>
@@ -298,9 +357,9 @@ const EditComp = () => {
               <label>
                 <span>Estado:</span>
                 <select
-                  {...register("uf")}
+                  {...register("estado")}
                   className={
-                    (errors?.uf ? "input-error " : "") +
+                    (errors?.estado ? "input-error " : "") +
                     "form-control shadow-none"
                   }
                   disabled
@@ -338,29 +397,33 @@ const EditComp = () => {
                   <option value="TO">Tocantins</option>
                 </select>
 
-                {errors?.uf && (
-                  <p className="error-messagec">{errors?.uf.message}</p>
+                {errors?.estado && (
+                  <p className="error-messagec">{errors?.estado.message}</p>
                 )}
               </label>
             </div>
             <div className="input-caixa">
               <label>
                 <span>Complemento (Opcional):</span>
-                <input type="text" placeholder="Complemento" />
+                <input
+                  type="text"
+                  placeholder="Complemento"
+                  {...register("complemento")}
+                />
               </label>
             </div>
             <div className="input-caixa">
               <label>
                 <span>Telefone:</span>
                 <input
-                  className={errors?.phone && "input-error"}
+                  className={errors?.telefone && "input-error"}
                   onKeyUp={handlePhone}
                   placeholder="(99)9999-9999"
                   defaultValue="(19)99842-1025"
-                  {...register("phone", { required: true })}
+                  {...register("telefone", { required: true })}
                 />
-                {errors?.phone && (
-                  <p className="error-messagec">{errors?.phone.message}</p>
+                {errors?.telefone && (
+                  <p className="error-messagec">{errors?.telefone.message}</p>
                 )}
               </label>
             </div>
@@ -371,7 +434,6 @@ const EditComp = () => {
                   className={errors?.capital && "input-error"}
                   type="text"
                   onInput={mascaraMoeda}
-                  defaultValue="R$ 1.000.000"
                   placeholder="Capital R$"
                   {...register("capital", { required: true })}
                 />
@@ -385,14 +447,14 @@ const EditComp = () => {
                 <span>Status:</span>
                 <select {...register("status")}>
                   <option value="0">Inativo</option>
-                  <option value="1">Ativo</option>
-                  <option value="2">Pendente</option>
+                  <option value="1">Pendente</option>
+                  <option value="2">Ativo</option>
                 </select>
               </label>
             </div>
             <div className="submit-input">
               <button type="submit" className="btCadastro">
-                Cadastrar
+                Atualizar
               </button>
               <Link to="/company">
                 <button type="submit" className="btCadastro">

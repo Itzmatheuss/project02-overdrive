@@ -49,6 +49,24 @@ input:focus-visible {
   margin: auto;
 }
 
+.mask-input {
+  border: none;
+  background-color: transparent;
+  cursor: default;
+  padding: 0;
+  text-align: center;
+}
+
+.mask-input:focus {
+  outline: none;
+}
+
+.mask-input:read-only {
+  color: inherit;
+  font: inherit;
+  cursor: default;
+}
+
 .add .btn-user {
   display: flex;
   background-color: #1488d6;
