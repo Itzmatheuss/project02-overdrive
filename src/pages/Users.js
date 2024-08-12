@@ -24,18 +24,21 @@ import { useEffect, useMemo, useState } from "react";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-  const usuarioService = useMemo(() => new UsuarioService(), []);
 
   useEffect(() => {
-    usuarioService
-      .listarTabela()
+    UsuarioService.listarTabela()
       .then((response) => {
-        setUsers(response.data);
+        setUsers(response);
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Erro ao buscar usuários:", error);
+        Swal.fire({
+          title: "Erro!",
+          text: "Não foi possível carregar os usuários.",
+          icon: "error",
+        });
       });
-  }, [usuarioService]);
+  }, []);
 
   const handleDelete = (id) => {
     console.log(id);
@@ -50,8 +53,7 @@ const Users = () => {
       confirmButtonText: "Sim, Deletar!",
     }).then((result) => {
       if (result.isConfirmed) {
-        usuarioService
-          .deletar(id)
+        UsuarioService.deletar(id)
           .then(() => {
             Swal.fire({
               title: "Deletado!",

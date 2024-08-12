@@ -24,19 +24,21 @@ import { useEffect, useMemo, useState } from "react";
 
 const Company = () => {
   const [companies, setCompanies] = useState([]);
-  const empresaService = useMemo(() => new EmpresaService(), []);
 
   useEffect(() => {
-    empresaService
-      .listarTabela()
+    EmpresaService.listarTabela()
       .then((response) => {
-        console.log(response.data);
         setCompanies(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Erro ao buscar empresas:", error);
+        Swal.fire({
+          title: "Erro!",
+          text: "Não foi possível carregar as empresas.",
+          icon: "error",
+        });
       });
-  }, [empresaService]);
+  }, []);
 
   const handleDelete = (id) => {
     console.log(id);
@@ -51,8 +53,7 @@ const Company = () => {
       confirmButtonText: "Sim, Deletar!",
     }).then((result) => {
       if (result.isConfirmed) {
-        empresaService
-          .deletar(id)
+        EmpresaService.deletar(id)
           .then(() => {
             Swal.fire({
               title: "Deletado!",
@@ -109,20 +110,16 @@ const Company = () => {
       {
         header: "Telefone",
         accessorKey: "telefone",
-        cell: (info) => (
-          <InputMask
-            mask="(99) 99999-9999"
-            value={info.getValue()}
-            readOnly
-            className="mask-input"
-          >
-            {(inputProps) => <input {...inputProps} />}
-          </InputMask>
-        ),
       },
       {
         header: "Capital",
         accessorKey: "capital",
+        cell: (info) => {
+          return new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(info.getValue());
+        },
       },
       {
         header: "Status",

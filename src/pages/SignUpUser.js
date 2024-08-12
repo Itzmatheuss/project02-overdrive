@@ -5,42 +5,48 @@ import { userValidationSchema } from "../hooks/UserValidation";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import UsuarioService from "../service/UsuarioService";
-import { useMemo } from "react";
 
 const SignUpUser = () => {
   const navigate = useNavigate();
-  const usuarioService = useMemo(() => new UsuarioService(), []);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(userValidationSchema) });
 
-  console.log({ errors });
-
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
     data.cpf = data.cpf.replace(/\D/g, "");
     data.empresaId = null; // Definindo empresaId como null diretamente
     data.status = parseInt(data.status);
-    usuarioService
-      .salvar(data)
-      .then(() => {
-        Swal.fire({
-          title: "Usuário alterado com sucesso!",
-          text: "",
-          icon: "success",
-        });
-        navigate("/users");
-      })
-      .catch((error) => {
-        console.error("Erro ao atualizar usuário:", error);
-        Swal.fire({
-          title: "Erro!",
-          text: "Não foi possível cadastrar o usuário.",
-          icon: "error",
-        });
+
+    try {
+      await UsuarioService.salvar(data);
+
+      Swal.fire({
+        title: "Usuário cadastrado com sucesso!",
+        icon: "success",
+        showCancelButton: true,
+        confirmButtonText: "Ativar usuário",
+        cancelButtonText: "Voltar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const ultimoUsuario = await UsuarioService.listarUltimo();
+          if (ultimoUsuario && ultimoUsuario.id) {
+            navigate(`/users/edituser/${ultimoUsuario.id}`);
+          }
+        } else {
+          navigate("/users");
+        }
       });
+    } catch (error) {
+      const errorMessage =
+        error.message || "Erro inesperado ao cadastrar o usuário.";
+      Swal.fire({
+        title: "Erro!",
+        html: errorMessage,
+        icon: "error",
+      });
+    }
   };
 
   const handleCpf = (e) => {
@@ -82,8 +88,8 @@ const SignUpUser = () => {
               placeholder="Nome"
               {...register("nome")}
             />
-            {errors?.name && (
-              <p className="error-message">{errors?.name.message}</p>
+            {errors?.nome && (
+              <p className="error-message">{errors?.nome.message}</p>
             )}
           </label>
           <label>

@@ -1,5 +1,7 @@
+/* eslint-disable */
+
 import "../styles/SignUpUser.css";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { userValidationSchema } from "../hooks/UserValidation";
@@ -12,8 +14,7 @@ const EditUser = () => {
   const [empresas, setEmpresas] = useState([]);
   const [user, setUser] = useState(null);
   const { id } = useParams();
-  const usuarioService = useMemo(() => new UsuarioService(), []);
-  const companyService = useMemo(() => new EmpresaService(), []);
+
   const navigate = useNavigate();
 
   const {
@@ -27,20 +28,16 @@ const EditUser = () => {
   const status = watch("status");
 
   useEffect(() => {
-    // Carrega a lista de empresas
-    companyService.listarTodos().then((response) => {
+    EmpresaService.listarStatus(2).then((response) => {
       setEmpresas(response.data);
     });
 
-    // Carrega o usuário se o ID estiver presente
     if (id) {
-      usuarioService
-        .listarPorId(id)
+      UsuarioService.listarPorId(id)
         .then((response) => {
-          const userData = response.data;
+          const userData = response;
           setUser(userData);
 
-          // Atualiza os valores do formulário
           setValue("nome", userData.nome);
           setValue("username", userData.userName);
           setValue("cpf", cpfMask(userData.cpf));
@@ -57,35 +54,34 @@ const EditUser = () => {
           console.error("Erro ao buscar usuário:", error);
         });
     }
-  }, [companyService, id, usuarioService]);
+  }, [id, setValue]);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
     data.cpf = data.cpf.replace(/\D/g, "");
     data.status = parseInt(data.status);
     data.id = id;
+
     if (data.empresaId === "") {
       data.empresaId = null;
     }
 
-    usuarioService
-      .atualizar(data)
-      .then(() => {
-        Swal.fire({
-          title: "Usuário alterado com sucesso!",
-          text: "",
-          icon: "success",
-        });
-        navigate("/users");
-      })
-      .catch((error) => {
-        console.error("Erro ao atualizar usuário:", error);
-        Swal.fire({
-          title: "Erro!",
-          text: "Não foi possível alterar o usuário.",
-          icon: "error",
-        });
+    try {
+      await UsuarioService.atualizar(data);
+      Swal.fire({
+        title: "Usuário cadastrado com sucesso!",
+        icon: "success",
       });
+      navigate("/users");
+    } catch (error) {
+      // Acessa a mensagem do erro lançado pela ErrorHandler
+      const errorMessage =
+        error.message || "Erro inesperado ao cadastrar o usuário.";
+      Swal.fire({
+        title: "Erro!",
+        html: errorMessage,
+        icon: "error",
+      });
+    }
   };
 
   const handleCpf = (e) => {
@@ -122,7 +118,7 @@ const EditUser = () => {
           <label>
             <span>Nome:</span>
             <input
-              className={errors?.name && "input-error"}
+              className={errors?.nome && "input-error"}
               type="text"
               placeholder="Nome"
               {...register("nome")}
@@ -186,7 +182,7 @@ const EditUser = () => {
                 </option>
                 {empresas.map((empresa) => (
                   <option key={empresa.id} value={empresa.id}>
-                    {empresa.nome}
+                    {empresa.nomeFantasia}
                   </option>
                 ))}
               </select>

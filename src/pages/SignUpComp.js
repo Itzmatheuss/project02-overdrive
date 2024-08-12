@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import "../styles/SignUpComp.css";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,11 +8,9 @@ import { companyValidationSchema } from "../hooks/CompanyValidation";
 import Swal from "sweetalert2";
 import { useMask } from "../hooks/Masks";
 import EmpresaService from "../service/EmpresaService";
-import { useMemo } from "react";
 
 const SignUpComp = () => {
   const navigate = useNavigate();
-  const empresaService = useMemo(() => new EmpresaService(), []);
 
   const {
     register,
@@ -28,22 +28,17 @@ const SignUpComp = () => {
     e.target.value = value;
 
     const cep = e.target.value.replace(/\D/g, "");
-    //console.log(cep);
     if (cep.length === 8) {
       fetch(`https://viacep.com.br/ws/${cep}/json/`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.erro) {
-            Swal.fire({ title: "CEP não encontrado!", icon: "error" });
-            document.getElementById("cep").value = "";
-            setFocus("cep");
-            setValue("rua", data.logradouro);
-            setValue("bairro", data.bairro);
-            setValue("cidade", data.localidade);
-            setValue("estado", "NN");
+            setFocus("cidade");
+            setValue("rua", "");
+            setValue("bairro", "");
+            setValue("cidade", "");
+            setValue("estado", "NN"); // Define estado como "NN" se CEP não encontrado
           } else {
-            // register({ name: 'rua', value: data.logradouro });
             setValue("rua", data.logradouro);
             setValue("bairro", data.bairro);
             setValue("cidade", data.localidade);
@@ -65,29 +60,31 @@ const SignUpComp = () => {
     input.value = maskCnpj(input.value);
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
     data.cnpj = data.cnpj.replace(/\D/g, "");
     data.cep = data.cep.replace(/\D/g, "");
     data.status = parseInt(data.status);
-    empresaService
-      .salvar(data)
-      .then(() => {
-        Swal.fire({
-          title: "Empresa cadastrada com sucesso!",
-          text: "",
-          icon: "success",
-        });
-        navigate("/company");
-      })
-      .catch((error) => {
-        console.error("Erro ao cadastrar empresa:", error);
-        Swal.fire({
-          title: "Erro!",
-          text: "Não foi possível cadastrar a empresa.",
-          icon: "error",
-        });
+    data.capital = data.capital.replace(/\D/g, "");
+    if (data.dataCadastro == "") {
+      data.dataCadastro = null;
+    }
+
+    try {
+      await EmpresaService.salvar(data);
+      Swal.fire({
+        title: "Empresa cadastrada com sucesso!",
+        icon: "success",
       });
+      navigate("/company");
+    } catch (error) {
+      const errorMessage =
+        error.message || "Erro inesperado ao cadastrar a empresa.";
+      Swal.fire({
+        title: "Erro!",
+        html: errorMessage,
+        icon: "error",
+      });
+    }
   };
 
   const handlePhone = (e) => {
@@ -241,7 +238,6 @@ const SignUpComp = () => {
                 <input
                   className={errors?.cidade && "input-errorc"}
                   type="text"
-                  disabled
                   placeholder="Cidade"
                   {...register("cidade", { required: true })}
                 />
@@ -256,7 +252,6 @@ const SignUpComp = () => {
                 <input
                   className={errors?.rua && "input-errorc"}
                   type="text"
-                  disabled
                   placeholder="Rua"
                   {...register("rua", { required: true })}
                 />
@@ -271,7 +266,6 @@ const SignUpComp = () => {
                 <input
                   className={errors?.bairro && "input-errorc"}
                   type="text"
-                  disabled
                   placeholder="Bairro"
                   {...register("bairro", { required: true })}
                 />
@@ -299,16 +293,15 @@ const SignUpComp = () => {
               <label>
                 <span>Estado:</span>
                 <select
-                  {...register("estado")}
+                  {...register("estado", { required: true })}
                   className={
                     (errors?.estado ? "input-errorc " : "") +
                     "form-control shadow-none"
                   }
-                  disabled
-                  required
-                  data-input
                 >
-                  <option value="NN">Estado</option>
+                  <option value="NN" disabled>
+                    Estado
+                  </option>
                   <option value="AC">Acre</option>
                   <option value="AL">Alagoas</option>
                   <option value="AP">Amapá</option>
@@ -398,7 +391,7 @@ const SignUpComp = () => {
                 Cadastrar
               </button>
               <Link to="/">
-                <button type="submit" className="btCadastro">
+                <button type="button" className="btCadastro">
                   Voltar
                 </button>
               </Link>

@@ -1,18 +1,18 @@
+/* eslint-disable */
+
 import "../styles/SignUpComp.css";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { companyValidationSchema } from "../hooks/CompanyValidation";
 import { useMask } from "../hooks/Masks";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect } from "react";
 import Swal from "sweetalert2";
 
 import EmpresaService from "../service/EmpresaService";
 
 const EditComp = () => {
-  const [empresas, setEmpresas] = useState([]);
   const { id } = useParams();
-  const empresaService = useMemo(() => new EmpresaService(), []);
 
   const navigate = useNavigate();
   const { maskCnae, phoneMask, maskCep, maskCurrency, maskCnpj } = useMask();
@@ -27,14 +27,10 @@ const EditComp = () => {
 
   useEffect(() => {
     if (id) {
-      empresaService
-        .listarPorId(id)
+      EmpresaService.listarPorId(id)
         .then((response) => {
           const companyData = response.data;
 
-          console.log("Received company data:", companyData);
-
-          // Verificar se a data é válida
           const dataCadastro = new Date(companyData.dataCadastro);
           if (!isNaN(dataCadastro)) {
             const formattedDate = dataCadastro.toISOString().split("T")[0];
@@ -59,14 +55,14 @@ const EditComp = () => {
           setValue("estado", companyData.estado);
           setValue("complemento", companyData.complemento);
           setValue("telefone", phoneMask(companyData.telefone));
-          setValue("capital", companyData.capital);
+          setValue("capital", maskCurrency(companyData.capital));
           setValue("status", companyData.status);
         })
         .catch((error) => {
           console.error("Error fetching company data:", error);
         });
     }
-  }, [empresaService, id, maskCnpj, maskCnae, maskCep, phoneMask]);
+  }, [id, maskCnpj, maskCnae, maskCep, phoneMask, setValue]);
 
   const checkCEP = (e) => {
     let value = e.target.value;
@@ -81,12 +77,10 @@ const EditComp = () => {
         .then((data) => {
           console.log(data);
           if (data.erro) {
-            Swal.fire({ title: "CEP não encontrado!", icon: "error" });
-            document.getElementById("cep").value = "";
-            setFocus("cep");
-            setValue("rua", data.logradouro);
-            setValue("bairro", data.bairro);
-            setValue("cidade", data.localidade);
+            setFocus("cidade");
+            setValue("rua", "");
+            setValue("bairro", "");
+            setValue("cidade", "");
             setValue("estado", "NN");
           } else {
             // register({ name: 'rua', value: data.logradouro });
@@ -112,30 +106,34 @@ const EditComp = () => {
     input.value = maskCnpj(input.value);
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
     data.cnpj = data.cnpj.replace(/\D/g, "");
     data.cep = data.cep.replace(/\D/g, "");
     data.status = parseInt(data.status);
+    data.capital = parseFloat(data.capital.replace(/\D/g, "") / 100);
     data.id = id;
-    empresaService
-      .atualizar(data)
-      .then(() => {
-        Swal.fire({
-          title: "Empresa cadastrada com sucesso!",
-          text: "",
-          icon: "success",
-        });
-        navigate("/company");
-      })
-      .catch((error) => {
-        console.error("Erro ao cadastrar empresa:", error);
-        Swal.fire({
-          title: "Erro!",
-          text: "Não foi possível cadastrar a empresa.",
-          icon: "error",
-        });
+
+    if (data.dataCadastro == "") {
+      data.dataCadastro = null;
+    }
+
+    try {
+      await EmpresaService.atualizar(data);
+      Swal.fire({
+        title: "Empresa atualizada com sucesso!",
+        icon: "success",
       });
+      navigate("/company");
+    } catch (error) {
+      // Acessa a mensagem do erro lançado pela ErrorHandler
+      const errorMessage =
+        error.message || "Erro inesperado ao atualizar a empresa.";
+      Swal.fire({
+        title: "Erro!",
+        html: errorMessage,
+        icon: "error",
+      });
+    }
   };
 
   const handlePhone = (e) => {
@@ -210,7 +208,6 @@ const EditComp = () => {
                 <input
                   className={errors?.dataCadastro && "input-error"}
                   type="date"
-                  value="2024-04-01"
                   {...register("dataCadastro", { required: true })}
                 />
                 {errors?.dataCadastro && (
@@ -296,7 +293,6 @@ const EditComp = () => {
                 <input
                   className={errors?.cidade && "input-error"}
                   type="text"
-                  disabled
                   defaultValue="Araras"
                   placeholder="Cidade"
                   {...register("cidade", { required: true })}
@@ -312,7 +308,6 @@ const EditComp = () => {
                 <input
                   className={errors?.rua && "input-error"}
                   type="text"
-                  disabled
                   defaultValue="Rodolpho Tognasca"
                   placeholder="Rua"
                   {...register("rua", { required: true })}
@@ -328,7 +323,6 @@ const EditComp = () => {
                 <input
                   className={errors?.bairro && "input-error"}
                   type="text"
-                  disabled
                   defaultValue="Jardim da Colina"
                   placeholder="Bairro"
                   {...register("bairro", { required: true })}
@@ -362,12 +356,13 @@ const EditComp = () => {
                     (errors?.estado ? "input-error " : "") +
                     "form-control shadow-none"
                   }
-                  disabled
                   defaultValue="SP"
                   required
                   data-input
                 >
-                  <option value="NN">Estado</option>
+                  <option value="NN" disabled>
+                    Estado
+                  </option>
                   <option value="AC">Acre</option>
                   <option value="AL">Alagoas</option>
                   <option value="AP">Amapá</option>
