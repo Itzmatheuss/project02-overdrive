@@ -54,7 +54,7 @@ const EditUser = () => {
           console.error("Erro ao buscar usuário:", error);
         });
     }
-  }, [id, setValue]);
+  }, [id, setUser]);
 
   const onSubmit = async (data) => {
     data.cpf = data.cpf.replace(/\D/g, "");

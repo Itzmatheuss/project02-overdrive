@@ -5,15 +5,15 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav class="navbar navbar-expand-lg nav-custom">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">
+    <nav className="navbar navbar-expand-lg nav-custom">
+      <div className="container-fluid">
+        <a className="navbar-brand" href="/">
           <Link to="/">
             <img src={Logo} alt="Logo" />
           </Link>
         </a>
         <button
-          class="navbar-toggler bt-open"
+          className="navbar-toggler bt-open"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#navbarNavAltMarkup"
@@ -21,19 +21,19 @@ const Navbar = () => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
-        <div class="offcanvas offcanvas-end" id="navbarNavAltMarkup">
-          <div class="offcanvas-header">
+        <div className="offcanvas offcanvas-end" id="navbarNavAltMarkup">
+          <div className="offcanvas-header">
             <button
               type="button"
-              class="btn-close bt"
+              className="btn-close bt"
               data-bs-dismiss="offcanvas"
               aria-label="Close"
             ></button>
           </div>
 
-          <div class="navbar-nav">
+          <div className="navbar-nav">
             <Link to="/company">
               <h5>Empresas</h5>
             </Link>

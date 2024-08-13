@@ -101,7 +101,7 @@ class UsuarioService {
   static async deletar(id) {
     try {
       const response = await axiosInstance.delete(`/usuario/${id}`);
-      return response.data;
+      return { success: true, data: response.data };
     } catch (error) {
       ErrorHandler.handle(error);
       throw error;

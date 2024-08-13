@@ -37,37 +37,25 @@ export const companyValidationSchema = Yup.object().shape({
         console.log(cnpj);
         return false; // Retorna falso se o cnpj não tiver 14 dígitos ou conter caracteres não numéricos
       }
-      console.log(ValidarCnpj(cnpj));
       return ValidarCnpj(cnpj); // Retorna o resultado da validação do CPF
     }),
   cnae: Yup.string()
     .required("Campo obrigatório.")
-    .length(6, "Deve conter 5 digitos")
-    .test("validar-cnae", "CNAE inválido", (value) => {
-      if (!value) return false;
-      if (value.match(/\d{4}-\d$/)) {
-        return true;
-      }
-    }),
+    .min(5, "Deve conter 5 digitos"),
   cep: Yup.string()
     .required("Campo obrigatório.")
-    .length(9, "O Cep deve ter 8 digitos")
-    .test("validar-cep", "CEP inválido", (value) => {
-      if (!value) return false;
-      if (value.match(/\d{5}-\d{3}$/)) {
-        return true;
-      }
-    }),
+    .min(8, "O Cep deve ter 8 digitos"),
+  cidade: Yup.string().required("Campo obrigatório."),
+  rua: Yup.string().required("Campo obrigatório."),
+  bairro: Yup.string().required("Campo obrigatório."),
   numero: Yup.string().required("Campo obrigatório."),
   telefone: Yup.string()
     .required("Campo obrigatório.")
     .min(11, "O telefone deve ter 11 dígitos")
     .test("validar-tel", "Número de telefone inválido", (value) => {
       if (!value) return false;
-      if (
-        value.match(/^\(\d{2}\) [3-9]\d{3}-\d{4}$/) ||
-        value.match(/^(\([1-9]{2}\))\s?9\d{4}-?\d{4}$/)
-      ) {
+      const tel = value.replace(/\D/g, "");
+      if (tel.length === 11 || tel.length === 10) {
         return true;
       }
       return false;

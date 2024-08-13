@@ -22,10 +22,8 @@ export const userValidationSchema = Yup.object().shape({
   telefone: Yup.string()
     .test("validar-tel", "Número de telefone inválido", (value) => {
       if (!value) return false;
-      if (
-        value.match(/^\(\d{2}\) [3-9]\d{3}-\d{4}$/) ||
-        value.match(/^(\([1-9]{2}\))\s?9\d{4}-?\d{4}$/)
-      ) {
+      const tel = value.replace(/\D/g, "");
+      if (tel.length === 11 || tel.length === 10) {
         return true;
       }
       return false;

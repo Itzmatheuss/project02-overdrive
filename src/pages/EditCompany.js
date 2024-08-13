@@ -6,12 +6,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { companyValidationSchema } from "../hooks/CompanyValidation";
 import { useMask } from "../hooks/Masks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 import EmpresaService from "../service/EmpresaService";
 
 const EditComp = () => {
+  const [empresas, setEmpresas] = useState([]);
   const { id } = useParams();
 
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ const EditComp = () => {
               companyData.dataCadastro
             );
           }
+          setEmpresas(response.data);
 
           setValue("nome", companyData.nome);
           setValue("nomeFantasia", companyData.nomeFantasia);
@@ -62,7 +64,7 @@ const EditComp = () => {
           console.error("Error fetching company data:", error);
         });
     }
-  }, [id, maskCnpj, maskCnae, maskCep, phoneMask, setValue]);
+  }, [id, setEmpresas]);
 
   const checkCEP = (e) => {
     let value = e.target.value;
@@ -174,7 +176,7 @@ const EditComp = () => {
               <label>
                 <span>Nome:</span>
                 <input
-                  className={errors?.nome && "input-error"}
+                  className={errors?.nome && "input-errorc"}
                   type="text"
                   defaultValue="Overdrive Ltda"
                   placeholder="Nome"
@@ -189,7 +191,7 @@ const EditComp = () => {
               <label>
                 <span>Nome Fantasia</span>
                 <input
-                  className={errors?.nomeFantasia && "input-error"}
+                  className={errors?.nomeFantasia && "input-errorc"}
                   type="text"
                   defaultValue="OverDrive"
                   placeholder="Nome Fantasia"
@@ -206,7 +208,7 @@ const EditComp = () => {
               <label>
                 <span>Data de abertura:</span>
                 <input
-                  className={errors?.dataCadastro && "input-error"}
+                  className={errors?.dataCadastro && "input-errorc"}
                   type="date"
                   {...register("dataCadastro", { required: true })}
                 />
@@ -221,7 +223,7 @@ const EditComp = () => {
               <label>
                 <span>CNPJ:</span>
                 <input
-                  className={errors?.cnpj && "input-error"}
+                  className={errors?.cnpj && "input-errorc"}
                   mask="00. 000. 000/0001-00"
                   name="cnpj"
                   id="cnpj"
@@ -240,7 +242,7 @@ const EditComp = () => {
               <label>
                 <span>Atividade Econômica (CNAE):</span>
                 <input
-                  className={errors?.cnae && "input-error"}
+                  className={errors?.cnae && "input-errorc"}
                   mask="0000-0"
                   defaultValue="0001-1"
                   onKeyUp={handleCnae}
@@ -256,7 +258,7 @@ const EditComp = () => {
               <label>
                 <span>Natureza Jurídica:</span>
                 <input
-                  className={errors?.naturezaJuridica && "input-error"}
+                  className={errors?.naturezaJuridica && "input-errorc"}
                   type="text"
                   defaultValue="Desenvolvimento"
                   placeholder="Natureza Jurídica"
@@ -273,7 +275,7 @@ const EditComp = () => {
               <label>
                 <span>Digite seu CEP:</span>
                 <input
-                  className={errors?.cep && "input-error"}
+                  className={errors?.cep && "input-errorc"}
                   id="cep"
                   mask="00000-000"
                   placeholder="CEP"
@@ -291,7 +293,7 @@ const EditComp = () => {
               <label>
                 <span>Cidade:</span>
                 <input
-                  className={errors?.cidade && "input-error"}
+                  className={errors?.cidade && "input-errorc"}
                   type="text"
                   defaultValue="Araras"
                   placeholder="Cidade"
@@ -306,7 +308,7 @@ const EditComp = () => {
               <label>
                 <span>Rua:</span>
                 <input
-                  className={errors?.rua && "input-error"}
+                  className={errors?.rua && "input-errorc"}
                   type="text"
                   defaultValue="Rodolpho Tognasca"
                   placeholder="Rua"
@@ -321,7 +323,7 @@ const EditComp = () => {
               <label>
                 <span>Bairro:</span>
                 <input
-                  className={errors?.bairro && "input-error"}
+                  className={errors?.bairro && "input-errorc"}
                   type="text"
                   defaultValue="Jardim da Colina"
                   placeholder="Bairro"
@@ -336,7 +338,7 @@ const EditComp = () => {
               <label>
                 <span>Número:</span>
                 <input
-                  className={errors?.numero && "input-error"}
+                  className={errors?.numero && "input-errorc"}
                   type="text"
                   defaultValue={211}
                   placeholder="Número"
@@ -353,7 +355,7 @@ const EditComp = () => {
                 <select
                   {...register("estado")}
                   className={
-                    (errors?.estado ? "input-error " : "") +
+                    (errors?.estado ? "input-errorc " : "") +
                     "form-control shadow-none"
                   }
                   defaultValue="SP"
@@ -411,7 +413,7 @@ const EditComp = () => {
               <label>
                 <span>Telefone:</span>
                 <input
-                  className={errors?.telefone && "input-error"}
+                  className={errors?.telefone && "input-errorc"}
                   onKeyUp={handlePhone}
                   placeholder="(99)9999-9999"
                   defaultValue="(19)99842-1025"
@@ -426,7 +428,7 @@ const EditComp = () => {
               <label>
                 <span>Capital:</span>
                 <input
-                  className={errors?.capital && "input-error"}
+                  className={errors?.capital && "input-errorc"}
                   type="text"
                   onInput={mascaraMoeda}
                   placeholder="Capital R$"
