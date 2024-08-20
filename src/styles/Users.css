@@ -1,6 +1,11 @@
 body {
   background-image: url(../assets/build.jpg);
 }
+
+.icon-small {
+  font-size: 6px;
+}
+
 .container_users,
 .container_comp {
   height: 82vh;
@@ -43,6 +48,7 @@ body {
 input:focus-visible {
   outline: none;
 }
+
 .tabela {
   width: 80%;
   text-align: center;
@@ -67,6 +73,12 @@ input:focus-visible {
   cursor: default;
 }
 
+.add .link-style {
+  text-decoration: none;
+  background-color: #1488d6;
+  border: none;
+}
+
 .add .btn-user {
   display: flex;
   background-color: #1488d6;
@@ -78,6 +90,16 @@ input:focus-visible {
   margin-bottom: 7px;
   cursor: pointer;
 }
+
+th .icon {
+  cursor: pointer; /* Garante que o cursor mude para mãozinha ao passar sobre o ícone */
+  display: inline-block;
+}
+
+th .icon:hover {
+  color: #007bff; /* Exemplo de cor ao passar o mouse */
+}
+
 .btn-user {
   text-decoration: none;
   outline: none;

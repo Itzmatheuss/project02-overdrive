@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import FirstPage from "@mui/icons-material/FirstPage";
 import ArrowForward from "@mui/icons-material/NavigateNext";
 import ArrowBack from "@mui/icons-material/NavigateBefore";
+import ArrowUp from "@mui/icons-material/ArrowUpward";
+import ArrowDown from "@mui/icons-material/ArrowDownward";
+import SwapIcon from "@mui/icons-material/SwapVert";
 import LastPage from "@mui/icons-material/LastPage";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -17,6 +20,7 @@ import {
   useReactTable,
   getCoreRowModel,
   flexRender,
+  getSortedRowModel,
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
@@ -85,10 +89,12 @@ const Company = () => {
       {
         header: "Nome",
         accessorKey: "nomeFantasia",
+        enableSorting: false,
       },
       {
         header: "CNPJ",
         accessorKey: "cnpj",
+        enableSorting: false,
         cell: (info) => (
           <InputMask
             mask="99.999.999/9999-99"
@@ -104,11 +110,13 @@ const Company = () => {
       {
         header: "Endereço",
         accessorKey: "cidade",
+        enableSorting: false,
       },
 
       {
         header: "Telefone",
         accessorKey: "telefone",
+        enableSorting: false,
       },
       {
         header: "Capital",
@@ -149,17 +157,20 @@ const Company = () => {
   );
 
   const [filtering, setFiltering] = useState("");
-
+  const [sorting, setSorting] = useState([]);
   const table = useReactTable({
     data: companies,
     columns,
     getCoreRowModel: getCoreRowModel(),
     columnResizeMode: "onChange",
+    getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     state: {
+      sorting,
       globalFilter: filtering,
     },
+    onSortingChange: setSorting,
     onGlobalFilterChange: setFiltering,
   });
 
@@ -180,7 +191,7 @@ const Company = () => {
         </div>
         <div className="tabela">
           <div className="add">
-            <Link to="/signupcomp">
+            <Link to="/signupcomp" className="link-style">
               <button type="submit" className="btn-user">
                 Adicionar Empresa
               </button>
@@ -191,11 +202,29 @@ const Company = () => {
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
+                    <th
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
+                      <span>
+                        {header.column.getCanSort() && (
+                          <span>
+                            {header.column.getIsSorted() === "asc" && (
+                              <ArrowUp style={{ fontSize: 20 }} />
+                            )}
+                            {header.column.getIsSorted() === "desc" && (
+                              <ArrowDown style={{ fontSize: 20 }} />
+                            )}
+                            {header.column.getIsSorted() === false && (
+                              <SwapIcon />
+                            )}
+                          </span>
+                        )}
+                      </span>
                     </th>
                   ))}
                 </tr>

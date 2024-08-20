@@ -6,6 +6,9 @@ import InputMask from "react-input-mask";
 import FirstPage from "@mui/icons-material/FirstPage";
 import ArrowForward from "@mui/icons-material/NavigateNext";
 import ArrowBack from "@mui/icons-material/NavigateBefore";
+import ArrowUp from "@mui/icons-material/ArrowUpward";
+import ArrowDown from "@mui/icons-material/ArrowDownward";
+import SwapIcon from "@mui/icons-material/SwapVert";
 import LastPage from "@mui/icons-material/LastPage";
 import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
@@ -18,12 +21,16 @@ import {
   getCoreRowModel,
   flexRender,
   getPaginationRowModel,
+  getSortedRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
+import { Icon } from "@mui/material";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [sorting, setSorting] = useState([]);
+  const [filtering, setFiltering] = useState("");
 
   useEffect(() => {
     UsuarioService.listarTabela()
@@ -42,7 +49,7 @@ const Users = () => {
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: "Tem certeza que deseja deletar ?",
+      title: "Tem certeza que deseja deletar?",
       text: "Esta é uma ação irreversível!",
       icon: "warning",
       showCancelButton: true,
@@ -56,7 +63,7 @@ const Users = () => {
           .then(() => {
             Swal.fire({
               title: "Deletado!",
-              text: "O colaborador foi deletada com sucesso.",
+              text: "O colaborador foi deletado com sucesso.",
               icon: "success",
             });
             setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
@@ -65,7 +72,7 @@ const Users = () => {
             console.error("Erro ao deletar colaborador:", error);
             Swal.fire({
               title: "Erro!",
-              text: "Não foi possível deletar a colaborador.",
+              text: "Não foi possível deletar o colaborador.",
               icon: "error",
             });
           });
@@ -75,10 +82,11 @@ const Users = () => {
 
   const columns = useMemo(
     () => [
-      { header: "ID", accessorKey: "id", size: 60 },
-      { header: "Nome", accessorKey: "nome" },
+      { header: "ID", accessorKey: "id", enableSorting: true, size: 60 },
+      { header: "Nome", accessorKey: "nome", enableSorting: false },
       {
         header: "CPF",
+        enableSorting: false,
         accessorKey: "cpf",
         cell: (info) => (
           <InputMask
@@ -91,10 +99,20 @@ const Users = () => {
           </InputMask>
         ),
       },
-      { header: "Nome de usuário", accessorKey: "userName" },
-      { header: "Status", accessorKey: "status", size: 80 },
+      {
+        header: "Nome de usuário",
+        accessorKey: "userName",
+        enableSorting: false,
+      },
+      {
+        header: "Status",
+        accessorKey: "status",
+        enableSorting: true,
+        size: 80,
+      },
       {
         header: "Empresa",
+        enableSorting: false,
         accessorFn: (row) => row.empresa?.nomeFantasia || "",
       },
       {
@@ -121,18 +139,18 @@ const Users = () => {
     []
   );
 
-  const [filtering, setFiltering] = useState("");
-
   const table = useReactTable({
     data: users,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    columnResizeMode: "onChange",
+    getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     state: {
+      sorting,
       globalFilter: filtering,
     },
+    onSortingChange: setSorting,
     onGlobalFilterChange: setFiltering,
   });
 
@@ -153,7 +171,7 @@ const Users = () => {
         </div>
         <div className="tabela">
           <div className="add">
-            <Link to="/signupuser">
+            <Link to="/signupuser" className="link-style">
               <button type="submit" className="btn-user">
                 Adicionar Pessoa
               </button>
@@ -164,11 +182,29 @@ const Users = () => {
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
+                    <th
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
+                      <span>
+                        {header.column.getCanSort() && (
+                          <span>
+                            {header.column.getIsSorted() === "asc" && (
+                              <ArrowUp style={{ fontSize: 20 }} />
+                            )}
+                            {header.column.getIsSorted() === "desc" && (
+                              <ArrowDown style={{ fontSize: 20 }} />
+                            )}
+                            {header.column.getIsSorted() === false && (
+                              <SwapIcon />
+                            )}
+                          </span>
+                        )}
+                      </span>
                     </th>
                   ))}
                 </tr>

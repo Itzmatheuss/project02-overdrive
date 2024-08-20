@@ -14,7 +14,6 @@ export const companyValidationSchema = Yup.object().shape({
     .required("Data obrigatória")
     .nullable()
     .transform((value, originalValue) => {
-      // Se o valor for uma string vazia, retorna null
       if (originalValue === "") return null;
       return value;
     })

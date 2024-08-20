@@ -83,7 +83,7 @@ const SignUpUser = () => {
           <label>
             <span>Nome:</span>
             <input
-              className={errors?.name && "input-error"}
+              className={errors?.nome && "input-error"}
               type="text"
               placeholder="Nome"
               {...register("nome")}
