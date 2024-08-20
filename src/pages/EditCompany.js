@@ -72,12 +72,11 @@ const EditComp = () => {
     e.target.value = value;
 
     const cep = e.target.value.replace(/\D/g, "");
-    //console.log(cep);
+
     if (cep.length === 8) {
       fetch(`https://viacep.com.br/ws/${cep}/json/`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.erro) {
             setFocus("cidade");
             setValue("rua", "");

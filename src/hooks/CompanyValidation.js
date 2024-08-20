@@ -34,7 +34,6 @@ export const companyValidationSchema = Yup.object().shape({
       if (!value) return false;
       const cnpj = value.replace(/\D/g, ""); // Remove caracteres não numéricos
       if (cnpj.length !== 14 || !/^\d{14}$/.test(cnpj)) {
-        console.log(cnpj);
         return false; // Retorna falso se o cnpj não tiver 14 dígitos ou conter caracteres não numéricos
       }
       return ValidarCnpj(cnpj); // Retorna o resultado da validação do CPF

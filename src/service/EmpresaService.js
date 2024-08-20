@@ -12,7 +12,6 @@ class ErrorHandler {
         errorMessage = error.response.data
           .map((err) => `<p>${err.errorMessage}</p>`)
           .join("\n");
-        console.log(errorMessage);
 
         throw new Error(errorMessage);
       } else if (error.response.data.errors) {

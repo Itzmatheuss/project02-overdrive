@@ -41,7 +41,6 @@ const Users = () => {
   }, []);
 
   const handleDelete = (id) => {
-    console.log(id);
     Swal.fire({
       title: "Tem certeza que deseja deletar ?",
       text: "Esta é uma ação irreversível!",
